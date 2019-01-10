@@ -1,48 +1,58 @@
 pipeline {
  
-	//Donde se va a ejecutar el Pipeline
 	agent {
 		label 'Slave_Induccion' 
 	}
 
-	//Opciones especÃ­ficas de Pipeline dentro del Pipeline
 	options {
-		//Mantener artefactos y salida de consola para el # especÃ­fico de ejecuciones recientes del Pipeline.
 		buildDiscarder(logRotator(numToKeepStr: '3'))
 
-		//No permitir ejecuciones concurrentes de Pipeline
 		disableConcurrentBuilds()
 	}
 	
-	//Una secciÃ³n que define las herramientas para â€œautoinstalarâ€� y poner en la PATH
 	tools {
-		jdk 'JDK8_Centos' //Preinstalada en la ConfiguraciÃ³n del Master
-		gradle 'Gradle4.5_Centos' //Preinstalada en la ConfiguraciÃ³n del Master
+		jdk 'JDK8_Centos' 
+		gradle 'Gradle4.5_Centos' 
 	}
 	
-	//AquÃ­ comienzan los â€œitemsâ€� del Pipeline
+	//Aqu�� comienzan los stages del Pipeline
 	stages{
 		stage('Checkout') {
 			steps{
-				echo "------------>Checkout<------------"
+				echo "------------>> Checkout <<------------"
+				checkout([$class: 'GitSCM ', branches: [[name: '*/master']] , 
+				doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git_Centos' ,
+				submoduleCfg: [], userRemoteConfigs: [[ credentialsId: 'GitHub_ArielJose55',
+		 	 	url: 'https://github.com/ArielJose55/parkingchallenge']]])
+		 	 	sh 'gradle clean'
+			}
+		}
+		
+		stage('Compile') {
+			steps{
+				echo "------------>> Compile has started <<------------"
+				sh 'gradle --b ./build.gradle compileJava'
 			}
 		}
 	
 		stage('Unit Tests') {
 			steps{
-				echo "------------>Unit Tests<------------"
+				echo "------------>> Unit Tests has started <<------------"
+				sh 'gradle test'
+				junit '**/build/test-results/test/*.xml' 
+				step( [ $class: 'JacocoPublisher' ] )
 			}
 		}
 				
-		stage('Integration Tests') {
+		/*stage('Integration Tests') {
 			steps {
-				echo "------------>Integration Tests<------------"
+				echo "------------>> Integration Tests  has started <<------------"
 			}
-		}
+		}*/
 	
 		stage('Static Code Analysis') {
 			steps{
-				echo '------------>AnÃ¡lisis de cÃ³digo estÃ¡tico<------------'
+				echo "------------->> Static Code Analysis has started <<--------------"
 				withSonarQubeEnv('Sonar') {
 					sh "${tool name: 'SonarScanner', type:'hudson.plugins.sonar.SonarRunnerInstallation'}/bin/sonar-scanner -Dproject.settings=sonar-project.properties"
 				}
@@ -51,7 +61,8 @@ pipeline {
 		
 		stage('Build') {
 			steps {
-				echo "------------>Build<------------"
+				echo "------------>> Build has started <<------------"
+				sh 'gradle --b ./build.gradle build -x test'
 			}
 		}
 	}
@@ -62,9 +73,13 @@ pipeline {
 		}
 		success {
 			echo 'This will run only if successful'
+			junit '**/build/test-results/test/*.xml'
 		}
 		failure {
 			echo 'This will run only if failed'
+			mail (to: 'ariel.arnedo@ceiba.com.co',
+			      subject: "Failed Pipeline: ${currentBuild.fullDisplayName}",
+			      body: "Something is wrong with ${env.BUILD_URL}")
 		}
 		unstable {
 			echo 'This will run only if the run was marked as unstable'
