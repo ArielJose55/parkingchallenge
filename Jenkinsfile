@@ -20,7 +20,7 @@ pipeline {
 		stage('Checkout') {
 			steps{
 				echo "------------>> Checkout <<------------"
-				checkout([$class: 'GitSCM ', branches: [[name: '*/master']] , 
+				checkout([$class: 'GitSCM', branches: [[name: '*/master']] , 
 				doGenerateSubmoduleConfigurations: false, extensions: [], gitTool: 'Git_Centos' ,
 				submoduleCfg: [], userRemoteConfigs: [[ credentialsId: 'GitHub_ArielJose55',
 		 	 	url: 'https://github.com/ArielJose55/parkingchallenge']]])
