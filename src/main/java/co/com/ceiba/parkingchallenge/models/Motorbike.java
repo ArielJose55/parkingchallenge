@@ -1,6 +1,7 @@
 package co.com.ceiba.parkingchallenge.models;
 
 public class Motorbike extends Vehicle{
+	
 	private String displacement;
 
 	public Motorbike() {
