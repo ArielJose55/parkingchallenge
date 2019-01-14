@@ -11,20 +11,26 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity
-@Table(name="PARKINGS")
+@Table(name="CONSTRAINTS")
 @Data
 @AllArgsConstructor
-public class ParkingEntity {
-
+public class Constraint {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="ID_PARKING")
+	@Column(name="ID_CONSTRAINT")
 	private Long id;
 	
-	@Column(name="NAME_PARKING", nullable=false)
-	private String name;
+	@Column(name = "MAX_AMOUNT")
+	private Integer maximumAmount;
 	
-	public ParkingEntity() {
+	@Column(name = "MIN_AMOUNT", nullable = false)
+	private Integer minimunAmount;
+	
+	@Column(name="TYPE_VEHICLE", nullable = false)
+	private String typeVehicle;
+	
+	public Constraint() {
 		super();
 	}
 }

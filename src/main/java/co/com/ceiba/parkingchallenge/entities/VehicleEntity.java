@@ -15,7 +15,7 @@ import lombok.Data;
 public class VehicleEntity {
 	
 	@Id
-	@Column(name="VEHICLE_PLATE")
+	@Column(name="VEHICLE_PLATE", nullable = false)
 	private String plate;
 	
 	@Column(name = "VEHICHE_MODEL", nullable = false)

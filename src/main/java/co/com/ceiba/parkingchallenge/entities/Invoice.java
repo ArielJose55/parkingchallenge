@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDateTimeConverter;
@@ -21,14 +23,13 @@ import lombok.Data;
 @Table(name="CHECKS")
 @Data
 @AllArgsConstructor
-public class CheckEntity {
+public class Invoice {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@Column(name="ID_CHECKS")
+	@Column(name="ID_CHECK")
 	private Long id;
 	
-
 	@Column(name="DEPARTURE_DATE", nullable=false)
 	@Convert(converter = LocalDateTimeConverter.class)
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy")
@@ -37,7 +38,12 @@ public class CheckEntity {
 	@Column(name="AMOUNT", nullable=false)
 	private Double amount;
 	
-	public CheckEntity() {
+	@OneToOne(optional=false)
+	@JoinColumn(name="REGISTRATION_ID_FK")
+	private RegistrationEntity registrationEntity;
+	
+	public Invoice() {
 		super();
 	}
 }
+
