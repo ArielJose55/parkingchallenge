@@ -61,7 +61,7 @@ public class VehicleController {
 				.orElseThrow(() -> new NotFountModelException(Car.class));
 	}
 	
-	@GetMapping("/motorbike/{plate}")	 										//---->	//ISSUE
+	@GetMapping("/motorbike/{plate}")	 										//---->	//OK 1/2
 	public Vehicle getMotorbike(@PathVariable String plate) {
 		return vehicleService.getVehiclee(plate, Motorbike.class)
 				.orElseThrow(() -> new NotFountModelException(Motorbike.class));

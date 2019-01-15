@@ -22,19 +22,19 @@ public class RegistrationController {
 	@Autowired
 	private RegistrationService registerableService;
 	
-	@GetMapping("/actives")
+	@GetMapping("/actives") 																//---->	OK	
 	public List<Registration> listAllReservationsActives() {
 		return registerableService.listAllRegistrations()
 				.orElseThrow(() -> new RuntimeException("No hay vehiculos activos"));
 	}
 	
-	@PostMapping("/car/check-out")
+	@PostMapping("/car/check-out") 															//---->	OK
 	public Invoice registerVehicularExit(@RequestBody Car car) {
 		return registerableService.registerVehicularExit(car)
 				.orElseThrow(() -> new RuntimeException("No se ha podigo guardar los "));
 	}
 	
-	@PostMapping("/bike/check-out")
+	@PostMapping("/bike/check-out") 														//---->	OK
 	public Invoice registerVehicularExit(@RequestBody Motorbike motorbike) {
 		return registerableService.registerVehicularExit(motorbike)
 				.orElseThrow(() -> new RuntimeException("No se ha podigo guardar los "));

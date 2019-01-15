@@ -16,7 +16,7 @@ public interface MotorbikeRepository extends CrudRepository<MotorbikeEntity, Lon
 			nativeQuery = true)
 	public List<MotorbikeEntity> findAllActiveVehicles();
 	
-	@Query(value = "SELECT * FROM MORTORBIKES m WHERE m.vehicle_id_fk = :plate",
+	@Query(value = "SELECT * FROM MOTORBIKES m WHERE m.vehicle_id_fk = :plate",
 			nativeQuery = true)
 	public MotorbikeEntity findByPlate(@Param("plate") String plate);
 }

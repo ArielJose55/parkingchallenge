@@ -16,6 +16,6 @@ public class RuleDisplacement extends Rule{
 	}
 	
 	public  boolean isApplyRule(Integer displacement) {
-		return this.getKey().equals(""+(displacement));
+		return Integer.parseInt(this.getKey()) < displacement;
 	}
 }
