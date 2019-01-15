@@ -5,8 +5,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
-import co.com.ceiba.parkingchallenge.repositories.CarRepository;
-import co.com.ceiba.parkingchallenge.repositories.MotorbikeRepository;
+import co.com.ceiba.parkingchallenge.models.Rule;
+import co.com.ceiba.parkingchallenge.util.ReaderContraint;
 
 @SpringBootApplication
 public class ParkingchallengeApplication {
@@ -16,9 +16,10 @@ public class ParkingchallengeApplication {
 	}
 	
 	@Bean
-	public ApplicationRunner xmlPrueba(CarRepository carRepo, MotorbikeRepository motor) {
-		return args -> {carRepo.findAllActiveVehicles().forEach(System.err::println);
-		motor.findAllActiveVehicles().forEach(System.err::println);
+	public ApplicationRunner verifi() {
+		return args->{
+			ReaderContraint reader = new ReaderContraint();
+			reader.readerRules(Rule.Type.DISPLACEMENT).forEach(System.err::println);
 		};
 	}
 }

@@ -25,40 +25,45 @@ public class VehicleController {
 	@Autowired
 	private VehicleService vehicleService;
 	
-	@PostMapping("/car/register")
+	@PostMapping("/car/register") 												//---->	OK
 	public Registration register(@RequestBody Car vehicle) {
 		return vehicleService.registerVehicle(vehicle)
 				.orElseThrow(() -> new NotSaveModelException(Vehicle.class));
 	}
 	
-	@PostMapping("/car/save")
+	@PostMapping("/motorbike/register") 										//---->	//OK
+	public Registration register(@RequestBody Motorbike vehicle) {
+		return vehicleService.registerVehicle(vehicle)
+				.orElseThrow(() -> new NotSaveModelException(Vehicle.class));
+	}
+	
+	@PostMapping("/car/save") 													//---->	//OK
 	public Vehicle saveCar(@RequestBody Car car) {
 		return vehicleService.save(car)
 				.orElseThrow(() -> new NotSaveModelException(Car.class));
 	}
 	
-	@PostMapping("/motorbike/save")
+	@PostMapping("/motorbike/save") 											//---->	//OK
 	public Vehicle saveMotorbike(@RequestBody Motorbike motorbike) {
 		return vehicleService.save(motorbike)
 				.orElseThrow(() -> new NotSaveModelException(Motorbike.class));
 	}
 	
-	@GetMapping("/car")
-	public List<Vehicle> listAllCars(){
+	@GetMapping("/all") 														//---->	//OK
+	public List<Vehicle> listAllVehicles(){
 		return vehicleService.listAllVehicles()
 				.orElseThrow(() -> new RuntimeException("No hay vehiculos activos"));
 	}
 	
-	@GetMapping("/car/{plate}")
+	@GetMapping("/car/{plate}") 												//---->	//OK
 	public Vehicle getCar(@PathVariable String plate) {
 		return vehicleService.getVehiclee(plate, Car.class)
 				.orElseThrow(() -> new NotFountModelException(Car.class));
 	}
 	
-	@GetMapping("/motorbike/{plate}")
+	@GetMapping("/motorbike/{plate}")	 										//---->	//ISSUE
 	public Vehicle getMotorbike(@PathVariable String plate) {
 		return vehicleService.getVehiclee(plate, Motorbike.class)
 				.orElseThrow(() -> new NotFountModelException(Motorbike.class));
 	}
-	
 }

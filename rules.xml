@@ -6,4 +6,8 @@
 		<day>SATURDAY</day>
 		<day>SUNDAY</day>
 	</rule>
+	<rule type="DISPLACEMENT">
+		<key>500</key>
+		<value>2000</value>
+	</rule>
 </rules>

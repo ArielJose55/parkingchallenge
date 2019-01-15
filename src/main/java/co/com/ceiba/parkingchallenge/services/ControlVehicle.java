@@ -2,7 +2,6 @@ package co.com.ceiba.parkingchallenge.services;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
@@ -19,33 +18,41 @@ import co.com.ceiba.parkingchallenge.util.ReaderContraint;
 @Component
 public class ControlVehicle implements IControlVehicle{
 	
-	@Autowired
-	private ReaderContraint readerConstraint;
-	
 	@Override
 	public RegistrationEntity validateRegister(Vehicle vehicle, ConstraintRepository constraintRepository, RegistrationRepository registrationRepository) {
 		applyRuleVehicleActive(vehicle, registrationRepository); // Verifica que el vehiculo no se encuentre activo en el parqueadero
 		Integer countMax = constraintRepository.numberMaxNumberVehicle(vehicle.getClass().getSimpleName()); 
+		
 		if (vehicle instanceof Car) {
-			Integer countInParking = registrationRepository.countActiveCar(); //Obtiene la cantidad de carros activos en el parqueadero
-			if ((countMax == null || countInParking == null) || countMax >= countInParking) {// Verifica que no se haya alcanzado en numero maximo de carros
-				applyRulesOfParking(vehicle, readerConstraint.readerRules(Rule.Type.PLATE)); //
+			
+			Integer carsInParking = registrationRepository.countActiveCar(); //Obtiene la cantidad de carros activos en el parqueadero
+			if ((countMax == null || carsInParking == null) || countMax > carsInParking) {// Verifica que no se haya alcanzado en numero maximo de carros
+				applyRulesOfParking(vehicle, new ReaderContraint().readerRules(Rule.Type.PLATE)); //
 				return FactoryRegistratration.create(StateType.ACTIVE, vehicle); // Crea una reservacion
 			}
+			
 			throw new RuntimeException("Cantidad maxima de Carros alcanzados");
 		} else {
-			if (countMax < registrationRepository.countActiveMotorbike()) {// Verifica que no se haya alcanzado en
-																			// numero maximo de motos
+			
+			Integer bikesInParking = registrationRepository.countActiveMotorbike(); //Obtiene la cantidad de Motos activos en el parqueadero
+			
+			if ((countMax == null || bikesInParking == null) || countMax > bikesInParking) {
 				return FactoryRegistratration.create(StateType.ACTIVE, vehicle); // Crea una reservacion
 			} else
 				throw new RuntimeException("Cantidad maxima de Motos alcanzados");
 		}
 	}
 	
+	/**
+	 * 
+	 * @param vehicle
+	 * @param registrationRepository
+	 */
 	private void applyRuleVehicleActive(Vehicle vehicle, RegistrationRepository registrationRepository) {
 		if(registrationRepository.findRegistrationActive(vehicle.getPlate()) != null)
 			throw new RuntimeException("Este Vehiculo ya se encuentra en el parqueadero");
 	}
+	
 	
 	/**
 	 * Aplica las reglas relacionadas con los dias habilidados de parkeo para vehiculos y las restricciones por cilindraje para motos

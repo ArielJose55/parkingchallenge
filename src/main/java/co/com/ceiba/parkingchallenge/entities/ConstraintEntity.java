@@ -14,7 +14,7 @@ import lombok.Data;
 @Table(name="CONSTRAINTS")
 @Data
 @AllArgsConstructor
-public class Constraint {
+public class ConstraintEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,7 +30,7 @@ public class Constraint {
 	@Column(name="TYPE_VEHICLE", nullable = false)
 	private String typeVehicle;
 	
-	public Constraint() {
+	public ConstraintEntity() {
 		super();
 	}
 }

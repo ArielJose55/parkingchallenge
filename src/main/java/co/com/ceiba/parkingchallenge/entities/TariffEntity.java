@@ -14,14 +14,14 @@ import lombok.Data;
 @Table(name="TARIFFS")
 @Data
 @AllArgsConstructor
-public class Tariff {
+public class TariffEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name="ID_TARIFF")
 	private Long id;
 	
-	@Column(name="NUMBER_HOUR", nullable=false, unique=true)
+	@Column(name="NUMBER_HOUR", nullable=false)
 	private Integer numberHours;
 	
 	@Column(name = "VALUE", nullable=false)
@@ -30,7 +30,7 @@ public class Tariff {
 	@Column(name="TYPE_VEHICLE", nullable = false)
 	private String typeVehicle;
 	
-	public Tariff() {
+	public TariffEntity() {
 		super();
 	}
 }

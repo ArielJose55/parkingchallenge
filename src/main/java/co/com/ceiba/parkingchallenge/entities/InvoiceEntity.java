@@ -23,7 +23,7 @@ import lombok.Data;
 @Table(name="CHECKS")
 @Data
 @AllArgsConstructor
-public class Invoice {
+public class InvoiceEntity {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -42,7 +42,7 @@ public class Invoice {
 	@JoinColumn(name="REGISTRATION_ID_FK")
 	private RegistrationEntity registrationEntity;
 	
-	public Invoice() {
+	public InvoiceEntity() {
 		super();
 	}
 }

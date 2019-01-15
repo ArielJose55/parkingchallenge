@@ -9,18 +9,16 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
 import co.com.ceiba.parkingchallenge.models.Rule;
 import co.com.ceiba.parkingchallenge.models.RuleDay;
 import co.com.ceiba.parkingchallenge.models.RuleDay.PlaceKey;
+import co.com.ceiba.parkingchallenge.models.RuleDisplacement;
 
-@Component
+
 public class ReaderContraint {
 
-	@Value("rules.xml")
-	private File fileRule;
+	private final File fileRule = new File("rules.xml");
 	
 	public List<Rule> readerRules(Rule.Type type){
 		SAXBuilder reader = new SAXBuilder();
@@ -40,6 +38,7 @@ public class ReaderContraint {
 	
 	private Rule mapper(Element element, Rule.Type type) {
 		if(type.compareTo(Rule.Type.PLATE) == 0) {
+			
 			RuleDay rule = new RuleDay(element.getChildTextTrim("key"));
 			rule.setPlace(PlaceKey.valueOf(element.getChildTextTrim("place")));
 			rule.setDays(element.getChildren("day")
@@ -47,7 +46,13 @@ public class ReaderContraint {
 					.map(p -> p.getValue())
 					.collect(Collectors.toList()));
 			return rule;
-		}else {
+			
+		} else if(type.compareTo(Rule.Type.DISPLACEMENT) == 0){
+			
+			RuleDisplacement rule = new RuleDisplacement(element.getChildTextTrim("key"));
+			rule.setValueAdded(Double.valueOf(element.getChildTextTrim("value")));
+			return rule;
+		} else {
 			throw new UnsupportedOperationException("Rule no implmentada");
 		}
 	}

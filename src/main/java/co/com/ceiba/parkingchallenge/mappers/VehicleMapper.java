@@ -11,6 +11,8 @@ import co.com.ceiba.parkingchallenge.models.Vehicle;
 
 public class VehicleMapper {
 	
+	private VehicleMapper() {}
+	
 	public static Optional<Vehicle> mapperToModel(CarEntity entity) {
 		return Optional.of(new Car(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(),
 				entity.getMotorType()));

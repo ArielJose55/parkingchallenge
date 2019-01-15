@@ -18,6 +18,11 @@ import co.com.ceiba.parkingchallenge.repositories.ConstraintRepository;
 import co.com.ceiba.parkingchallenge.repositories.MotorbikeRepository;
 import co.com.ceiba.parkingchallenge.repositories.RegistrationRepository;
 
+/**
+ * 
+ * @author ariel.arnedo
+ *
+ */
 @Service
 public class VehicleService {
 	
@@ -36,6 +41,12 @@ public class VehicleService {
 	@Autowired
 	private ControlVehicle controlVehicle;
 	
+	/**
+	 * 
+	 * 
+	 * @param vehicle
+	 * @return
+	 */
 	public Optional<Registration> registerVehicle(Vehicle vehicle) {
 		return Optional.of(RegistrationMapper
 				.mapperToModel(registrationRepository
@@ -43,6 +54,11 @@ public class VehicleService {
 								.validateRegister(vehicle, constraintRepository, registrationRepository))));
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @return
+	 */
 	public Optional<List<Vehicle>> listAllVehicles(){
 		List<Vehicle> listActiveVehicle = carRepository.findAllActiveVehicles()
 				  .stream()
@@ -56,6 +72,12 @@ public class VehicleService {
 		return Optional.of(listActiveVehicle);
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param vehicle
+	 * @return
+	 */
 	public Optional<Vehicle> save(Vehicle vehicle){
 		if(vehicle instanceof Car) {
 			return VehicleMapper.mapperToModel(carRepository.save(VehicleMapper.mapperToEntity((Car) vehicle)));
@@ -64,6 +86,13 @@ public class VehicleService {
 		}
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param plate
+	 * @param vehicle
+	 * @return
+	 */
 	public Optional<Vehicle> getVehiclee(String plate, Class <? extends Vehicle> vehicle){
 		if(vehicle.isAssignableFrom(Car.class)) {
 			return VehicleMapper.mapperToModel(carRepository.findByPlate(plate));

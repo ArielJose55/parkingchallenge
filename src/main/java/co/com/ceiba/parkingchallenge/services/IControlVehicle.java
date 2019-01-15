@@ -11,6 +11,5 @@ import co.com.ceiba.parkingchallenge.repositories.RegistrationRepository;
  *
  */
 public interface IControlVehicle {	
-	
 	public RegistrationEntity validateRegister(Vehicle vehicle, ConstraintRepository constraintRepository, RegistrationRepository registrationRepository);
 }
