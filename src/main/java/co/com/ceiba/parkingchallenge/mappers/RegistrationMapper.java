@@ -6,6 +6,7 @@ import java.util.Optional;
 import co.com.ceiba.parkingchallenge.entities.CarEntity;
 import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
 import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
+import co.com.ceiba.parkingchallenge.exceptions.ViolatedConstraintException;
 import co.com.ceiba.parkingchallenge.models.Registration;
 
 public class RegistrationMapper {
@@ -13,11 +14,11 @@ public class RegistrationMapper {
 	private RegistrationMapper() {}
 
 	public static Registration mapperToModel(RegistrationEntity entity) {
-		Registration model = new Registration();
-		model.setId(entity.getId());
-		model.setRegistrationDate(entity.getRegistrationDate());
-		model.setState(entity.getState());
-		return model;
+		return entity != null? 
+				new Registration(entity.getId(), entity.getRegistrationDate(), entity.getState()
+					, null)
+				: null;
+			
 	}
 	
 	public static Registration mapperToModel(RegistrationEntity entity, List<CarEntity> carEntities, List<MotorbikeEntity> motorbikeEntities) {
@@ -29,10 +30,13 @@ public class RegistrationMapper {
 		long countCar = carEntities.stream().filter(c -> c.getVehicleEntity().getPlate().equals(entity.getVehicleEntity().getPlate())).count();
 		long countBike = motorbikeEntities.stream().filter(c -> c.getVehicleEntity().getPlate().equals(entity.getVehicleEntity().getPlate())).count();
 		
+		if(countCar != 0 && countBike != 0)
+			throw new ViolatedConstraintException("Existe un carro y una moto esta misma placa");
+		
 		if(countCar != 0) { //Es un carro
 			
 			// Si existe mas de una coincidencia entonces hay incosistencia de datos, no puede haber mas de un carro con la misma placa activo
-			if(countCar > 1) throw new RuntimeException("Hay registrados mas de un carro con esta placa: " + entity.getVehicleEntity().getPlate()); 
+			if(countCar > 1) throw new ViolatedConstraintException("Hay registrados mas de un carro con esta placa: " + entity.getVehicleEntity().getPlate()); 
 			
 			Optional<CarEntity> car = carEntities
 					.stream()
@@ -47,7 +51,7 @@ public class RegistrationMapper {
 			// Si existe mas de una coincidencia entonces hay incosistencia de datos, no
 			// puede haber mas de un carro con la misma placa activo
 			if (countBike > 1)
-				throw new RuntimeException("Hay registrados mas de una motocicleta con esta placa: "
+				throw new ViolatedConstraintException("Hay registrados mas de una motocicleta con esta placa: "
 						+ entity.getVehicleEntity().getPlate());
 
 			Optional<MotorbikeEntity> bike = motorbikeEntities.stream()

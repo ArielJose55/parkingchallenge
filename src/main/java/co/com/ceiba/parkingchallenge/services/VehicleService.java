@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import co.com.ceiba.parkingchallenge.entities.CarEntity;
+import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
 import co.com.ceiba.parkingchallenge.mappers.RegistrationMapper;
 import co.com.ceiba.parkingchallenge.mappers.VehicleMapper;
 import co.com.ceiba.parkingchallenge.models.Car;
@@ -48,7 +50,7 @@ public class VehicleService {
 	 * @return
 	 */
 	public Optional<Registration> registerVehicle(Vehicle vehicle) {
-		return Optional.of(RegistrationMapper
+		return Optional.ofNullable(RegistrationMapper
 				.mapperToModel(registrationRepository
 						.save(controlVehicle
 								.validateRegister(vehicle, constraintRepository, registrationRepository))));
@@ -69,7 +71,7 @@ public class VehicleService {
 				.map(VehicleMapper::mapperOfEntity)
 				.collect(Collectors.toList()));
 		
-		return Optional.of(listActiveVehicle);
+		return Optional.ofNullable(listActiveVehicle);
 	}
 	
 	/**
@@ -80,9 +82,9 @@ public class VehicleService {
 	 */
 	public Optional<Vehicle> save(Vehicle vehicle){
 		if(vehicle instanceof Car) {
-			return VehicleMapper.mapperToModel(carRepository.save(VehicleMapper.mapperToEntity((Car) vehicle)));
+			return Optional.ofNullable(VehicleMapper.mapperToModel(carRepository.save(VehicleMapper.mapperToEntity((Car) vehicle))));
 		}else {
-			return VehicleMapper.mapperToModel(motorbikeRepository.save(VehicleMapper.mapperToEntity((Motorbike) vehicle)));
+			return Optional.ofNullable(VehicleMapper.mapperToModel(motorbikeRepository.save(VehicleMapper.mapperToEntity((Motorbike) vehicle))));
 		}
 	}
 	
@@ -93,11 +95,30 @@ public class VehicleService {
 	 * @param vehicle
 	 * @return
 	 */
-	public Optional<Vehicle> getVehiclee(String plate, Class <? extends Vehicle> vehicle){
+	public Optional<Vehicle> getVehicle(String plate, Class <? extends Vehicle> vehicle) {
 		if(vehicle.isAssignableFrom(Car.class)) {
-			return VehicleMapper.mapperToModel(carRepository.findByPlate(plate));
+			return Optional.ofNullable(VehicleMapper.mapperToModel(carRepository.findByPlate(plate)));
 		}else {
-			return VehicleMapper.mapperToModel(motorbikeRepository.findByPlate(plate));
+			return Optional.ofNullable(VehicleMapper.mapperToModel(motorbikeRepository.findByPlate(plate)));
 		}
+	}
+	
+	/**
+	 * 
+	 * 
+	 * @param plate
+	 * @return
+	 */
+	public Optional<Vehicle> getVehicle(String plate){
+		CarEntity car = carRepository.findByPlate(plate);
+		if(car != null) {
+			return Optional.of(VehicleMapper.mapperToModel(car));
+		}
+		
+		MotorbikeEntity motorbike = motorbikeRepository.findByPlate(plate);
+		if(motorbike != null) {
+			return Optional.of(VehicleMapper.mapperToModel(motorbike));
+		}
+		return Optional.empty();
 	}
 }

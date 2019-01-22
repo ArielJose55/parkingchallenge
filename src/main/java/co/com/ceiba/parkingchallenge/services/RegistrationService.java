@@ -12,6 +12,7 @@ import co.com.ceiba.parkingchallenge.entities.CarEntity;
 import co.com.ceiba.parkingchallenge.entities.InvoiceEntity;
 import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
 import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
+import co.com.ceiba.parkingchallenge.exceptions.NotFountModelException;
 import co.com.ceiba.parkingchallenge.mappers.InvoiceMapper;
 import co.com.ceiba.parkingchallenge.mappers.RegistrationMapper;
 import co.com.ceiba.parkingchallenge.models.Car;
@@ -27,6 +28,7 @@ import co.com.ceiba.parkingchallenge.repositories.TariffRepository;
 import co.com.ceiba.parkingchallenge.services.calculation.CalculationPaymentCar;
 import co.com.ceiba.parkingchallenge.services.calculation.CalculationPaymentMotobike;
 import co.com.ceiba.parkingchallenge.services.calculation.ICalculation;
+
 
 @Service
 public class RegistrationService {
@@ -49,7 +51,7 @@ public class RegistrationService {
 	public Optional<List<Registration>> listAllRegistrations(){
 		List<CarEntity> carList = carRepository.findAllActiveVehicles();
 		List<MotorbikeEntity> motorBike = motorbikeRepository.findAllActiveVehicles();
-		return Optional.of(registrationRepository.listAllRegistrationActive()
+		return Optional.ofNullable(registrationRepository.listAllRegistrationActive()
 				.stream()
 				.map(r -> RegistrationMapper.mapperToModel(r, carList, motorBike))
 				.collect(Collectors.toList()));
@@ -77,6 +79,6 @@ public class RegistrationService {
 						.mapperToModel(invoiceRepository.save(invoice)));
 			}
 		}
-		throw new RuntimeException("El vehiculo con esta placa no se encuentre en el parqueadero");
+		throw new NotFountModelException("El vehiculo con esta placa "+ vehicle.getPlate() +" no se encuentre en el parqueadero");
 	}
 }

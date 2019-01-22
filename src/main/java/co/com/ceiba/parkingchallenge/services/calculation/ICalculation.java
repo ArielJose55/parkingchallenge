@@ -8,6 +8,7 @@ import com.google.common.collect.Lists;
 
 import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
 import co.com.ceiba.parkingchallenge.entities.TariffEntity;
+import co.com.ceiba.parkingchallenge.exceptions.ViolatedConstraintException;
 import co.com.ceiba.parkingchallenge.util.DateUtility;
 
 /**
@@ -16,14 +17,6 @@ import co.com.ceiba.parkingchallenge.util.DateUtility;
  *
  */
 public interface ICalculation {
-	
-	public static final int HOURS_DAY = 24;
-
-	public static final int TARIFF_APPLY_HOUR = 1;
-
-	public static final int TARIFF_APPLY_DAY = 24;
-
-	public static final int HOUR_LIMETE_START_DAY = 9; // hora de comienzo de dia de parqueo
 
 	/**
 	 * 
@@ -43,46 +36,44 @@ public interface ICalculation {
 		
 		long hours = DateUtility.calcularHoursInParking(reEntity.getRegistrationDate(), LocalDateTime.now()); 
 
-		if (hours <= HOUR_LIMETE_START_DAY) {// cobrar por hora
+		if ( hours <= TariffApply.HOUR_LIMETE_START_DAY.getVelue() ) {// cobrar por hora
 
-			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs).stream() // encuentra la tarrifa aplicable para
-																					// una hora
-					.filter(t -> t.getNumberHours() == TARIFF_APPLY_HOUR).findFirst();
-
-			if (!tariff.isPresent())
-				throw new RuntimeException(
-						"No existe tarrifa aplicable para este vehiculo para " + TARIFF_APPLY_HOUR + " horas u horas");
-
-			return (double) hours * tariff.get().getValue();
-
-		} else if (hours <= HOURS_DAY) {// cobrar por un dia
-
-			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs).stream() // encuentra la tarrifa aplicable para
-																					// una dia
-					.filter(t -> t.getNumberHours() == TARIFF_APPLY_DAY).findFirst();
+			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs).stream() 
+						.filter(t -> t.getNumberHours() == TariffApply.BY_HOUR.getVelue() ).findFirst(); // encuentra una tarrifa aplicable para una hora
 
 			if (!tariff.isPresent())
-				throw new RuntimeException(
-						"No existe tarrifa aplicable para este vehiculo para " + TARIFF_APPLY_DAY + " horas u horas");
+				throw new ViolatedConstraintException(
+						"No existe tarrifa aplicable para este vehiculo para " + hours + " horas u horas");
 
-			return tariff.get().getValue().doubleValue();
+			return (double) hours * tariff.get().getValue(); // retorna la cantidas de horas en parqueo multiplicada por la tarifa de una hora
 
-		} else {// cobrar por dias y horas
+		} else if ( hours <= TariffApply.BY_DAY.getVelue() ) {// cobrar por un dia
+
+			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs).stream() 
+						.filter(t -> t.getNumberHours() == TariffApply.BY_DAY.getVelue() ).findFirst(); // encuentra la tarrifa aplicable para una dia
+
+			if (!tariff.isPresent())
+				throw new ViolatedConstraintException(
+						"No existe tarrifa aplicable para este vehiculo para " + hours + " horas");
+
+			return tariff.get().getValue().doubleValue(); // retorna el valor de un dia de parqueo porque se demoro mas del 9 h y menos de 24 h
+
+		} else {// cobrar por dias y horas 
 
 			Optional<TariffEntity> tariffHour = Lists.newArrayList(tariffs).stream() // encuentra la tarrifa aplicable  para una hora
-					.filter(t -> t.getNumberHours() == TARIFF_APPLY_HOUR).findFirst();
+					.filter(t -> t.getNumberHours() == TariffApply.BY_HOUR.getVelue() ).findFirst();
 
 			Optional<TariffEntity> tariffDay = Lists.newArrayList(tariffs).stream() // encuentra la tarrifa aplicable para una dia
-					.filter(t -> t.getNumberHours() == TARIFF_APPLY_DAY).findFirst();
+					.filter(t -> t.getNumberHours() == TariffApply.BY_DAY.getVelue() ).findFirst();
 
 			if (!tariffHour.isPresent() || !tariffDay.isPresent())
-				throw new RuntimeException("No existen tarrifas aplicables para este vehiculo");
+				throw new ViolatedConstraintException("No existen tarrifas aplicables para este vehiculo");
 
-			long numberDaysInParking = hours / HOURS_DAY;
+			long numberDaysInParking = hours / TariffApply.BY_DAY.getVelue(); // dias es parqueo
 
-			long numberHoursInParking = hours - (HOURS_DAY * numberDaysInParking);
+			long numberHoursInParking = hours - (TariffApply.BY_DAY.getVelue() * numberDaysInParking); // horas restantes de parqueo
 
-			return ((double) numberDaysInParking * tariffDay.get().getValue())
+			return ((double) numberDaysInParking * tariffDay.get().getValue()) 
 					+ ((double) numberHoursInParking * tariffHour.get().getValue());
 		}
 	}
