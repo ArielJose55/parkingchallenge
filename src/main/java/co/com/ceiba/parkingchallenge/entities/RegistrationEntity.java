@@ -19,11 +19,13 @@ import org.springframework.data.jpa.convert.threeten.Jsr310JpaConverters.LocalDa
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="REGISTRATIONS")
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 public class RegistrationEntity {
 	

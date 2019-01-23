@@ -1,6 +1,7 @@
 package co.com.ceiba.parkingchallenge.integrationTests.controllers;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -58,7 +59,12 @@ public class VehicleControllerTest extends UtilIntegration {
 				.content(mapper.writeValueAsBytes(motorbike)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("plate", is("M41-41")));
-				
+		
+		mvc.perform(post(createUrl(port, "/vehicle/car/save"))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsBytes(motorbike)))
+				.andExpect(status().is(500))
+				.andExpect(jsonPath("message", is(containsString("could not execute statement;"))));		
 	}
 	
 	@Test
@@ -69,7 +75,13 @@ public class VehicleControllerTest extends UtilIntegration {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(car)))
 				.andExpect(status().isOk())
-				.andExpect(jsonPath("plate", is("M41-42")));		
+				.andExpect(jsonPath("plate", is("M41-42")));
+		
+		mvc.perform(post(createUrl(port, "/vehicle/car/save"))
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(mapper.writeValueAsBytes(car)))
+				.andExpect(status().is(500))
+				.andExpect(jsonPath("message", is(containsString("could not execute statement;"))));
 	}
 	
 	@Test
@@ -97,6 +109,8 @@ public class VehicleControllerTest extends UtilIntegration {
 				.andExpect(jsonPath("state", is("ACTIVE")));		
 	}
 	
+	
+	
 	@Test
 	public void registerMotorbikeTest() throws Exception {
 		Motorbike motorbike = createVehicle("M41-45", 1000);
@@ -119,6 +133,8 @@ public class VehicleControllerTest extends UtilIntegration {
 			      .andExpect(status().isOk());
 
 	}
+	
+	
 	
 	
 }

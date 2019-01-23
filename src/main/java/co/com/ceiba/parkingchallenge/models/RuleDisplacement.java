@@ -1,11 +1,10 @@
 package co.com.ceiba.parkingchallenge.models;
 
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-
-@Data
-@EqualsAndHashCode(callSuper=true)
+@Getter
+@Setter
 public class RuleDisplacement extends Rule{
 	
 	private Double valueAdded;
