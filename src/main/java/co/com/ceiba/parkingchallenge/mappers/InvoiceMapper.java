@@ -8,11 +8,8 @@ public class InvoiceMapper {
 	private InvoiceMapper() {}
 	
 	public static Invoice mapperToModel(InvoiceEntity entity) {
-		Invoice invoice = new Invoice();
-		invoice.setId(entity.getId());
-		invoice.setDepartureDate(entity.getDepartureDate());
-		invoice.setAmount(entity.getAmount());
-		invoice.setRegistration(RegistrationMapper.mapperToModel(entity.getRegistrationEntity()));
-		return invoice;
+		return entity != null?
+				new Invoice(entity.getId(), entity.getDepartureDate(), entity.getAmount(), RegistrationMapper.mapperToModel(entity.getRegistrationEntity()))
+				: null;
 	}
 }

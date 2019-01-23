@@ -15,18 +15,24 @@ import co.com.ceiba.parkingchallenge.models.RuleDay;
 import co.com.ceiba.parkingchallenge.models.RuleDay.PlaceKey;
 import co.com.ceiba.parkingchallenge.models.RuleDisplacement;
 
+/**
+ * Clase para obtener reglas a partir de un archivo XML
+ * 
+ * @author ariel.arnedo
+ *
+ */
+public class ReaderContraintXml implements IReaderRule {
 
-public class ReaderContraint {
-
-	private final File fileRule = new File("rules.xml");
 	
-	public List<Rule> readerRules(Rule.Type type){
+	
+	@Override
+	public List<Rule> readerRules(File fileRules, Rule.Type type ){
 		SAXBuilder reader = new SAXBuilder();
         Document document;
 		try {
-			document = reader.build(fileRule);
+			document = reader.build(fileRules);
 		} catch (JDOMException | IOException e) {
-			throw new RuntimeException("Error al leer archivo " + fileRule.getName(), e);
+			throw new UnsupportedOperationException("Error al leer archivo " + fileRules.getName(), e);
 		}
 		
         return document.getRootElement().getChildren("rule")
@@ -36,24 +42,22 @@ public class ReaderContraint {
         		.collect(Collectors.toList());
 	}
 	
-	private Rule mapper(Element element, Rule.Type type) {
+	public Rule mapper(Element element, Rule.Type type) {
 		if(type.compareTo(Rule.Type.PLATE) == 0) {
 			
 			RuleDay rule = new RuleDay(element.getChildTextTrim("key"));
 			rule.setPlace(PlaceKey.valueOf(element.getChildTextTrim("place")));
 			rule.setDays(element.getChildren("day")
 					.stream()
-					.map(p -> p.getValue())
+					.map( Element::getValue )
 					.collect(Collectors.toList()));
 			return rule;
 			
-		} else if(type.compareTo(Rule.Type.DISPLACEMENT) == 0){
+		} else {
 			
 			RuleDisplacement rule = new RuleDisplacement(element.getChildTextTrim("key"));
 			rule.setValueAdded(Double.valueOf(element.getChildTextTrim("value")));
 			return rule;
-		} else {
-			throw new UnsupportedOperationException("Rule no implmentada");
-		}
+		} 
 	}
 }

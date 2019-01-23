@@ -1,6 +1,13 @@
 spring:
   application:
-    name: ParkingMan  datasource:
-    url: jdbc:mysql://localhost:3306/parking    username: root
-    password:   jpa:    hibernate:      ddl-auto: update
-server:  port: 8081
+    name: ParkingMan
+  datasource:
+    url: jdbc:mysql://localhost:3306/parking
+    username: root
+    password:
+  jpa:
+      hibernate:
+        ddl-auto: create
+server:
+  port: 8081
+  

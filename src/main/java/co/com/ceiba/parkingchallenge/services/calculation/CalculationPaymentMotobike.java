@@ -1,5 +1,6 @@
 package co.com.ceiba.parkingchallenge.services.calculation;
 
+import java.io.File;
 import java.util.List;
 
 import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
@@ -7,7 +8,7 @@ import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
 import co.com.ceiba.parkingchallenge.entities.TariffEntity;
 import co.com.ceiba.parkingchallenge.models.Rule;
 import co.com.ceiba.parkingchallenge.models.RuleDisplacement;
-import co.com.ceiba.parkingchallenge.util.ReaderContraint;
+import co.com.ceiba.parkingchallenge.util.ReaderContraintXml;
 
 /**
  * 
@@ -18,10 +19,10 @@ public class CalculationPaymentMotobike implements ICalculation{
 
 	@Override
 	public double calculateAmountToPay(RegistrationEntity reEntity, Object entity, List<TariffEntity> tariffs) {
-		
-		ReaderContraint reader = new ReaderContraint();
+		File fileRules = new File("rules.xml");
+		ReaderContraintXml reader = new ReaderContraintXml();
 		MotorbikeEntity motor = (MotorbikeEntity) entity;
-		List<Rule> rules = reader.readerRules(Rule.Type.DISPLACEMENT);
+		List<Rule> rules = reader.readerRules(fileRules ,Rule.Type.DISPLACEMENT);
 		
 		double valueAdded = rules.stream()
 			.map(r -> (RuleDisplacement)r)

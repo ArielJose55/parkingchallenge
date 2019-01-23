@@ -1,7 +1,5 @@
 package co.com.ceiba.parkingchallenge.mappers;
 
-import java.util.Optional;
-
 import co.com.ceiba.parkingchallenge.entities.CarEntity;
 import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
 import co.com.ceiba.parkingchallenge.entities.VehicleEntity;
@@ -13,45 +11,47 @@ public class VehicleMapper {
 	
 	private VehicleMapper() {}
 	
-	public static Optional<Vehicle> mapperToModel(CarEntity entity) {
-		return Optional.of(new Car(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(),
-				entity.getMotorType()));
+	public static Vehicle mapperToModel(CarEntity entity) {
+		return entity != null? 
+				new Car(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(), entity.getMotorType()) 
+				: null;
 	}
 	
-	public static Optional<Vehicle> mapperToModel(MotorbikeEntity entity) {
-		return Optional.of(new Motorbike(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(),
-				entity.getDisplacement()));
+	public static Vehicle mapperToModel(MotorbikeEntity entity) {
+		return entity != null?
+				new Motorbike(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(), entity.getDisplacement())
+				: null;
 	}
 	
 	public static CarEntity mapperToEntity(Car model) {
-		CarEntity entity = new CarEntity();
-		entity.setMotorType(model.getTypeMotor());
-		entity.setVehicleEntity(new VehicleEntity(model.getPlate(), model.getModel(),model.getBrand()));
-		return entity;
+		return model != null? 
+				new CarEntity(null ,model.getTypeMotor(), new VehicleEntity(model.getPlate(), model.getModel(),model.getBrand()))
+				: null;
 	}
 	
 	public static MotorbikeEntity mapperToEntity(Motorbike model) {
-		MotorbikeEntity entity = new MotorbikeEntity();
-		entity.setDisplacement(model.getDisplacement());
-		entity.setVehicleEntity(new VehicleEntity(model.getPlate(), model.getModel(),model.getBrand()));
-		return entity;
+		return model != null?
+			new MotorbikeEntity(null, model.getDisplacement(), new VehicleEntity(model.getPlate(), model.getModel(),model.getBrand()))
+			: null;
 	}
 	
 	public static VehicleEntity mapperToEntity(Vehicle model) {
-		VehicleEntity entity = new VehicleEntity();
-		entity.setPlate(model.getPlate());
-		entity.setModel(model.getModel());
-		entity.setBrand(model.getBrand());
-		return entity;
+		return model != null?
+				new VehicleEntity(model.getPlate(), model.getModel(), model.getBrand())
+				: null;
 	}
 	
 	public static Vehicle mapperOfEntity(CarEntity entity) {
-		return new Car(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(),
-				entity.getMotorType());
+		return entity != null? 
+			new Car(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(),
+				entity.getMotorType())
+			: null;
 	}
 	
 	public static Vehicle mapperOfEntity(MotorbikeEntity entity) {
-		return new Motorbike(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(),
-				entity.getDisplacement());
+		return entity != null? 
+			new Motorbike(entity.getVehicleEntity().getPlate(), entity.getVehicleEntity().getModel(), entity.getVehicleEntity().getBrand(),
+				entity.getDisplacement())
+			: null;
 	}
 }
