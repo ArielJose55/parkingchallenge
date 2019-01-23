@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 
 import co.com.ceiba.parkingchallenge.entities.StateType;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 public class Registration {
 	private Long id;

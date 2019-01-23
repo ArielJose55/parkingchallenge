@@ -7,11 +7,13 @@ import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="VEHICLES")
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class VehicleEntity {
 	

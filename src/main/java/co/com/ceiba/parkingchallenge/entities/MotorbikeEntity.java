@@ -13,11 +13,13 @@ import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Table(name="MOTORBIKES")
-@Data
+@Setter
+@Getter
 @AllArgsConstructor
 public class MotorbikeEntity {
 	

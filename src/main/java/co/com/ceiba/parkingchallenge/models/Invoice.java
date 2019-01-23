@@ -3,9 +3,11 @@ package co.com.ceiba.parkingchallenge.models;
 import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 public class Invoice {
 	private Long id;

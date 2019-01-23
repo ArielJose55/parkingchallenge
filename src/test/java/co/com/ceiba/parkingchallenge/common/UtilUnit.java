@@ -13,6 +13,7 @@ import co.com.ceiba.parkingchallenge.entities.StateType;
 import co.com.ceiba.parkingchallenge.entities.TariffEntity;
 import co.com.ceiba.parkingchallenge.entities.VehicleEntity;
 import co.com.ceiba.parkingchallenge.models.Car;
+import co.com.ceiba.parkingchallenge.models.Motorbike;
 import co.com.ceiba.parkingchallenge.models.Registration;
 import co.com.ceiba.parkingchallenge.models.Rule;
 import co.com.ceiba.parkingchallenge.models.RuleDay;
@@ -118,4 +119,10 @@ public class UtilUnit {
 		return new Registration(1l, LocalDateTime.now(), state, vehicle);
 	}
 	
+	
+	protected Vehicle createVehicleMotorbike(String plate) {
+		Motorbike moto = new Motorbike(plate, RandomStringUtils.random(10, false, true),RandomStringUtils.random(10, true, true));
+		moto.setDisplacement(1000);
+		return moto;
+	}
 }

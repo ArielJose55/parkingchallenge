@@ -7,7 +7,6 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -37,7 +36,6 @@ import co.com.ceiba.parkingchallenge.repositories.CarRepository;
 import co.com.ceiba.parkingchallenge.repositories.ConstraintRepository;
 import co.com.ceiba.parkingchallenge.repositories.MotorbikeRepository;
 import co.com.ceiba.parkingchallenge.repositories.RegistrationRepository;
-import co.com.ceiba.parkingchallenge.services.ControlRegistration;
 import co.com.ceiba.parkingchallenge.services.ControlVehicle;
 import co.com.ceiba.parkingchallenge.util.ReaderContraintXml;
 
@@ -160,29 +158,21 @@ public class ControlVehicleTest extends UtilUnit{
 			.isEqualTo( "XXX" );
 	}
 	
-////	@Test
-////	public void applyRuleWhereVehicleIsNotRegisteredAndIsCarIsFailByRule(){
-////		
-////		//Regla para restringir el paso de vehiclos hoy, cuyas placas comienzen por X
-////		List<Rule> ruleFixed = Lists.newArrayList(createRule("X", LocalDateTime.now().getDayOfWeek().name()));
-////		
-////		when(registrationRepository.findRegistrationActive("XXX")).thenReturn( null ); // el vihiculo no esta registrado
-////		when(constraintRepository.numberMaxNumberVehicle("Car")).thenReturn( 20 );  //Retorna el maximo de carros permitidos
-////		when(registrationRepository.countActiveCar()).thenReturn( 15 ); //Cantidad de carros activas en el parqueadero
-////		when(reader.readerRules(new File("rules.xml"), Rule.Type.PLATE)).thenReturn( ruleFixed );
-////		
-////		Vehicle vehicle = new Car("XXX", "YYY", "ZZZ");
-////		
-////		try{
-////			controlVehicle
-////			.validateRegister(vehicle, constraintRepository, registrationRepository);
-////			fail("ViolatedConstraintException experada porque la placa del vehiculo viola una restriccion");
-////		}catch (ViolatedConstraintException e) {
-////			assertThat(e)
-////				.hasMessage("Hoy, el vehiculo con esta: "+ vehicle.getPlate() +" NO esta autorizado para ingresar");
-////		}
-////	}
-//	
+	@Test
+	public void applyRuleWhereVehicleIsNotRegisteredAndIsCarIsFailByRule(){
+		RuleDay ruleForToday = new RuleDay("A"); // Regla aplicada a los matriculos que empiecen por A y para el dia de hoy
+		ruleForToday.setDays(Lists.newArrayList(LocalDateTime.now().getDayOfWeek().name()));
+		ruleForToday.setPlace(PlaceKey.START);
+		
+		Vehicle car = createVehicleCar("AAMM-4");
+		try {
+			controlVehicle.applyRulesOfParking(car, Lists.newArrayList(ruleForToday));
+		}catch (ViolatedConstraintException e) {
+			assertThat(e)
+				.hasMessage("Hoy, el vehiculo con esta: " + car.getPlate() + " NO esta autorizado para ingresar");
+		}
+	}
+	
 	@Test
 	public void applyRuleWhereVehicleIsNotRegisteredAndIsMotorbikeIsFail(){
 		when(registrationRepository.findRegistrationActive("XXX")).thenReturn( null ); // el vihiculo no esta registrado

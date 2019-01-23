@@ -1,12 +1,10 @@
 package co.com.ceiba.parkingchallenge.models;
 
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode(callSuper=true)
 public class Motorbike extends Vehicle{
 
 	private Integer displacement;
