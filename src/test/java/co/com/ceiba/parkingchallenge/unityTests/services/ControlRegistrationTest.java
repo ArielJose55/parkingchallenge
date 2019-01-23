@@ -11,9 +11,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import co.com.ceiba.parkingchallenge.common.UtilUnit;
@@ -38,15 +35,6 @@ public class ControlRegistrationTest extends UtilUnit {
 
 	private List<TariffEntity> tariffs;
 	
-	@TestConfiguration
-	static class ControlRegistrationTestContextConfiguration {
-
-		@Bean
-		public ControlRegistration controlRegistration() {
-			return new ControlRegistration();
-		}
-	}
-
 	@Mock
 	private RegistrationRepository registrationRepository;
 	
@@ -65,7 +53,6 @@ public class ControlRegistrationTest extends UtilUnit {
 	@Mock
 	private ReaderContraintXml reader;
 
-	@Autowired
 	@InjectMocks
 	private ControlRegistration controlRegistration;
 
@@ -116,26 +103,4 @@ public class ControlRegistrationTest extends UtilUnit {
 				hasMessage("El vehiculo con esta placa " + vehicle.getPlate() + " no se encuentre en el parqueadero");
 		}
 	}
-	
-//	@Test
-//	public void listAllRegistrationsTestCar() {
-//		
-//		Vehicle vehicle = new Car("M1");
-//		CarEntity carEntity = createCarEntity("M1");
-//		InvoiceEntity invoiceEntity= new InvoiceEntity(1L, LocalDateTime.now(), 500.0, createRegistration(StateType.ACTIVE, carEntity.getVehicleEntity()));
-//		
-//		when( registrationRepository.findRegistrationActive( vehicle.getPlate() ))
-//				.thenReturn( createRegistration(StateType.ACTIVE, carEntity.getVehicleEntity()) );
-//		when( carRepository.findByPlate( vehicle.getPlate() ))
-//				.thenReturn(carEntity);
-//		when( tariffRepository.findByTypeVehicle("Car") )
-//				.thenReturn(tariffs.stream()
-//						.filter(t -> t.getTypeVehicle().equals("Car")).collect(Collectors.toList()));
-//		when(invoiceRepository.save(new InvoiceEntity())).thenReturn(invoiceEntity);
-//		
-//		assertThat(controlRegistration.registerCheckOutVehicular(vehicle, registrationRepository,
-//				carRepository, motorbikeRepository, invoiceRepository, tariffRepository))
-//				.isNotNull();
-//	}
-	
 }

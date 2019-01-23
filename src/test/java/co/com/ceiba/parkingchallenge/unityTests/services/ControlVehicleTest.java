@@ -12,9 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
@@ -42,15 +39,6 @@ import co.com.ceiba.parkingchallenge.util.ReaderContraintXml;
 
 @RunWith(SpringRunner.class)
 public class ControlVehicleTest extends UtilUnit{
-
-	@TestConfiguration
-	static class ControlVehicleTestContextConfiguration {
-
-		@Bean
-		public ControlVehicle controlVehicle() {
-			return new ControlVehicle();
-		}
-	}
 	
 	@Mock
 	private ConstraintRepository constraintRepository;
@@ -67,7 +55,6 @@ public class ControlVehicleTest extends UtilUnit{
 	@Mock
 	private ReaderContraintXml reader;
 	
-	@Autowired
 	@InjectMocks
 	private ControlVehicle controlVehicle;
 	
@@ -77,7 +64,6 @@ public class ControlVehicleTest extends UtilUnit{
 	public void setUp() {
 		this.rules = Lists.newArrayList( createRule("A", "SATURDAY", "SUNDAY") );
 	}
-	
 	
 	@Test
 	public void applyRuleWhereVehicleIsAlreadyRegistered() {

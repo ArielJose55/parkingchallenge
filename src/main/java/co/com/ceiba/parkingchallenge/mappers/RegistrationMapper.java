@@ -9,7 +9,7 @@ import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
 import co.com.ceiba.parkingchallenge.exceptions.ViolatedConstraintException;
 import co.com.ceiba.parkingchallenge.models.Registration;
 
-public class RegistrationMapper {
+public final class RegistrationMapper {
 	
 	private RegistrationMapper() {}
 

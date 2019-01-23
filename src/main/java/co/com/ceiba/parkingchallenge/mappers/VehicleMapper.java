@@ -7,7 +7,7 @@ import co.com.ceiba.parkingchallenge.models.Car;
 import co.com.ceiba.parkingchallenge.models.Motorbike;
 import co.com.ceiba.parkingchallenge.models.Vehicle;
 
-public class VehicleMapper {
+public final class VehicleMapper {
 	
 	private VehicleMapper() {}
 	
