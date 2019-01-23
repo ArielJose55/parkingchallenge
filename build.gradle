@@ -24,14 +24,15 @@ repositories {
 }
 
 dependencies {
+	compile 'org.projectlombok:lombok:1.18.4'
 	implementation 'org.jdom:jdom2:2.0.6'
 	implementation 'com.google.guava:guava:27.0.1-jre'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	//runtimeOnly 'org.postgresql:postgresql'
 	runtimeOnly 'mysql:mysql-connector-java:8.0.14'
-	runtimeOnly 'org.projectlombok:lombok:1.18.4'
-	runtimeOnly 'org.springframework.boot:spring-boot-devtools'
+	//runtimeOnly 'org.projectlombok:lombok:1.18.4'
+	//runtimeOnly 'org.springframework.boot:spring-boot-devtools'
 	testRuntimeOnly 'com.h2database:h2'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.assertj:assertj-core:3.11.1'
