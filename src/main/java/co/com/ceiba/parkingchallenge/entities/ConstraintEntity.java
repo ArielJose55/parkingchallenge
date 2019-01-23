@@ -13,9 +13,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name="CONSTRAINTS")
-@Getter
 @Setter
-@AllArgsConstructor
 public class ConstraintEntity {
 	
 	@Id

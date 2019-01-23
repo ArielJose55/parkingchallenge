@@ -8,14 +8,9 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ExceptionResponse {
-
+	
 	private LocalDateTime timestamp;
-	
 	private String message;
-	
 	private String detalls;
 	
-	public ExceptionResponse() {
-		super();
-	}
 }

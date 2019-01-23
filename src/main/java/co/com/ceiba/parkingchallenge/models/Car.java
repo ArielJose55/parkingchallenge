@@ -1,5 +1,6 @@
 package co.com.ceiba.parkingchallenge.models;
 
+
 import lombok.Getter;
 import lombok.Setter;
 
