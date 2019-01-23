@@ -63,20 +63,6 @@ public class VehicleController {
 						() -> new NotFountModelException("No se encontraron vehiculos activos en el parqueadero"));
 	}
 	
-	@GetMapping("/car/{plate}") 												
-	public Vehicle getCar(@PathVariable String plate) {
-		return vehicleService.getVehicle(plate, Car.class)
-				.orElseThrow(
-						() -> new NotFountModelException("No se encontro ningun carro registrado con esta placa: " + plate));
-	}
-	
-	@GetMapping("/motorbike/{plate}")	 										
-	public Vehicle getMotorbike(@PathVariable String plate) {
-		return vehicleService.getVehicle(plate, Motorbike.class)
-				.orElseThrow(
-						() -> new NotFountModelException("No se encontro ningun motocicleta registrado con esta placa: " + plate));
-	}
-	
 	@GetMapping("/{plate}")	
 	public Vehicle findVehicleByPlate(@PathVariable String plate) {
 		return vehicleService.getVehicle(plate)

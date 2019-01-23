@@ -17,20 +17,20 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
 
+import co.com.ceiba.parkingchallenge.common.UtilUnit;
 import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
 import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
 import co.com.ceiba.parkingchallenge.entities.StateType;
 import co.com.ceiba.parkingchallenge.entities.TariffEntity;
 import co.com.ceiba.parkingchallenge.exceptions.ViolatedConstraintException;
 import co.com.ceiba.parkingchallenge.models.Rule;
-import co.com.ceiba.parkingchallenge.models.RuleDisplacement;
 import co.com.ceiba.parkingchallenge.services.calculation.CalculationPaymentCar;
 import co.com.ceiba.parkingchallenge.services.calculation.CalculationPaymentMotobike;
 import co.com.ceiba.parkingchallenge.services.calculation.ICalculation;
 import co.com.ceiba.parkingchallenge.util.ReaderContraintXml;
 
 @RunWith(SpringRunner.class)
-public class CalculationTest {
+public class CalculationTest extends UtilUnit{
 
 	private List<TariffEntity> tariffs;
 	
@@ -217,16 +217,4 @@ public class CalculationTest {
 		assertThat(pay)
 			.isEqualTo(6000.0);
 	}
-	
-	private TariffEntity createTariff(int hours, double value, String type) {
-		return new TariffEntity(1L, hours, value, type);
-	}
-	
-	private Rule createRule(String key, double valueAdded) {
-		RuleDisplacement rule = new RuleDisplacement(key);
-		rule.setValueAdded(valueAdded);
-		return rule;
-	}
-	
-	
 }

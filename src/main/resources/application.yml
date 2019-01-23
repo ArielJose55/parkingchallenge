@@ -1,11 +1,13 @@
 spring:
   application:
-    name: ParkingMan  datasource:
-    url: jdbc:postgresql://localhost:5432/parking    username: ceiba
-    password: root  jpa:
-    show-sql: true
-    generate-ddl: true    hibernate:      ddl-auto: update
-    properties:      hibernate:
-        temp:
-          use_jdbc_metadata_defaults: false
-server:  port: 8081
+    name: ParkingMan
+  datasource:
+    url: jdbc:mysql://localhost:3306/parking
+    username: root
+    password:
+  jpa:
+      hibernate:
+        ddl-auto: create
+server:
+  port: 8081
+  

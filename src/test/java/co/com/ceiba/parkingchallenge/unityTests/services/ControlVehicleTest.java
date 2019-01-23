@@ -11,6 +11,7 @@ import org.apache.commons.lang.RandomStringUtils;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -19,7 +20,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
 
+import co.com.ceiba.parkingchallenge.common.UtilUnit;
+import co.com.ceiba.parkingchallenge.entities.CarEntity;
+import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
 import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
+import co.com.ceiba.parkingchallenge.entities.StateType;
+import co.com.ceiba.parkingchallenge.entities.VehicleEntity;
 import co.com.ceiba.parkingchallenge.exceptions.ViolatedConstraintException;
 import co.com.ceiba.parkingchallenge.models.Car;
 import co.com.ceiba.parkingchallenge.models.Motorbike;
@@ -27,27 +33,27 @@ import co.com.ceiba.parkingchallenge.models.Rule;
 import co.com.ceiba.parkingchallenge.models.RuleDay;
 import co.com.ceiba.parkingchallenge.models.RuleDay.PlaceKey;
 import co.com.ceiba.parkingchallenge.models.Vehicle;
+import co.com.ceiba.parkingchallenge.repositories.CarRepository;
 import co.com.ceiba.parkingchallenge.repositories.ConstraintRepository;
+import co.com.ceiba.parkingchallenge.repositories.MotorbikeRepository;
 import co.com.ceiba.parkingchallenge.repositories.RegistrationRepository;
+import co.com.ceiba.parkingchallenge.services.ControlRegistration;
 import co.com.ceiba.parkingchallenge.services.ControlVehicle;
-import co.com.ceiba.parkingchallenge.services.IControlVehicle;
 import co.com.ceiba.parkingchallenge.util.ReaderContraintXml;
 
-@RunWith(SpringRunner.class)
-public class ControlVehicleServiceTest {
-	
-	 @TestConfiguration
-		static class ControlVehicleServiceTestContextConfiguration {
-	              
-	        @Bean
-	        public IControlVehicle controlVehicleService() {
-	        	return new ControlVehicle();
-	        }
-	    }
-	
-	@Autowired
-	private ControlVehicle controlVehicle;
 
+@RunWith(SpringRunner.class)
+public class ControlVehicleTest extends UtilUnit{
+
+	@TestConfiguration
+	static class ControlVehicleTestContextConfiguration {
+
+		@Bean
+		public ControlVehicle controlVehicle() {
+			return new ControlVehicle();
+		}
+	}
+	
 	@Mock
 	private ConstraintRepository constraintRepository;
 	
@@ -55,7 +61,17 @@ public class ControlVehicleServiceTest {
 	private RegistrationRepository registrationRepository;
 	
 	@Mock
+	private CarRepository carRepository;
+	
+	@Mock
+	private MotorbikeRepository motorbikeRepository;
+	
+	@Mock
 	private ReaderContraintXml reader;
+	
+	@Autowired
+	@InjectMocks
+	private ControlVehicle controlVehicle;
 	
 	private List<Rule> rules; //
 	
@@ -64,13 +80,14 @@ public class ControlVehicleServiceTest {
 		this.rules = Lists.newArrayList( createRule("A", "SATURDAY", "SUNDAY") );
 	}
 	
+	
 	@Test
 	public void applyRuleWhereVehicleIsAlreadyRegistered() {
 		
 		when(registrationRepository.findRegistrationActive("M1")).thenReturn(new RegistrationEntity());
 		
 		try {
-			controlVehicle.validateRegister(createVehicle("M1"), constraintRepository, registrationRepository);
+			controlVehicle.validateRegister(createVehicleCar("M1"), constraintRepository, registrationRepository);
 			
 			fail("ViolatedConstraintException experada porque ya se encontro un vehiclo con esta placa activo");
 		}catch (ViolatedConstraintException e) {
@@ -130,27 +147,42 @@ public class ControlVehicleServiceTest {
 		}
 	}
 	
-//	@Test
-//	public void applyRuleWhereVehicleIsNotRegisteredAndIsCarIsFailByRule(){
-//		when(registrationRepository.findRegistrationActive("XXX")).thenReturn( null ); // el vihiculo no esta registrado
-//		when(constraintRepository.numberMaxNumberVehicle("Car")).thenReturn( 20 );  //Retorna el maximo de carros permitidos
-//		when(registrationRepository.countActiveCar()).thenReturn( 15 ); //Cantidad de carros activas en el parqueadero
-//		when(reader.readerRules(new File("rules.xml"), Rule.Type.PLATE)).thenReturn( rules );
-//		when(todayMock.now().getDayOfWeek().name()).thenReturn("SATURDAY");
-//		
-//		
-//		Vehicle vehicle = new Car("XXX", "YYY", "ZZZ");
-//		
-//		try{
-//			controlVehicle
-//			.validateRegister(vehicle, constraintRepository, registrationRepository);
-//			fail("ViolatedConstraintException experada porque la placa del vehiculo viola una restriccion");
-//		}catch (ViolatedConstraintException e) {
-//			assertThat(e)
-//				.hasMessage("Hoy, el vehiculo con esta: "+ vehicle.getPlate() +" NO esta autorizado para ingresar");
-//		}
-//	}
+	@Test
+	public void verifyActiveRegistrationTest() {
+		
+		RegistrationEntity registrationEntity = new RegistrationEntity(1L, LocalDateTime.now(), StateType.ACTIVE, 
+				new VehicleEntity("XXX","YYY","ZZZ"));
+		
+		when(registrationRepository.findRegistrationActive("XXX"))
+			.thenReturn(registrationEntity);
+		
+		assertThat(controlVehicle.verifyActiveRegistration("XXX", registrationRepository).getVehicleEntity().getPlate())
+			.isEqualTo( "XXX" );
+	}
 	
+////	@Test
+////	public void applyRuleWhereVehicleIsNotRegisteredAndIsCarIsFailByRule(){
+////		
+////		//Regla para restringir el paso de vehiclos hoy, cuyas placas comienzen por X
+////		List<Rule> ruleFixed = Lists.newArrayList(createRule("X", LocalDateTime.now().getDayOfWeek().name()));
+////		
+////		when(registrationRepository.findRegistrationActive("XXX")).thenReturn( null ); // el vihiculo no esta registrado
+////		when(constraintRepository.numberMaxNumberVehicle("Car")).thenReturn( 20 );  //Retorna el maximo de carros permitidos
+////		when(registrationRepository.countActiveCar()).thenReturn( 15 ); //Cantidad de carros activas en el parqueadero
+////		when(reader.readerRules(new File("rules.xml"), Rule.Type.PLATE)).thenReturn( ruleFixed );
+////		
+////		Vehicle vehicle = new Car("XXX", "YYY", "ZZZ");
+////		
+////		try{
+////			controlVehicle
+////			.validateRegister(vehicle, constraintRepository, registrationRepository);
+////			fail("ViolatedConstraintException experada porque la placa del vehiculo viola una restriccion");
+////		}catch (ViolatedConstraintException e) {
+////			assertThat(e)
+////				.hasMessage("Hoy, el vehiculo con esta: "+ vehicle.getPlate() +" NO esta autorizado para ingresar");
+////		}
+////	}
+//	
 	@Test
 	public void applyRuleWhereVehicleIsNotRegisteredAndIsMotorbikeIsFail(){
 		when(registrationRepository.findRegistrationActive("XXX")).thenReturn( null ); // el vihiculo no esta registrado
@@ -170,26 +202,48 @@ public class ControlVehicleServiceTest {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param plate
-	 * @return
-	 */
-	private Vehicle createVehicle(String plate) {
-		return new Car(
-				plate, RandomStringUtils.random(10, true, false), RandomStringUtils.random(4, true, false));
+	@Test
+	public void findVehicleByPlateTestIsNull() {
+		when(carRepository.findByPlate("M1")).thenReturn( null ); // el vihiculo no esta registrado
+		when(motorbikeRepository.findByPlate("M1")).thenReturn( null );
+		
+		assertThat(controlVehicle.findVehicleByPlate("M1", carRepository, motorbikeRepository))
+			.isNull();
 	}
 	
-	/**
-	 * 
-	 * @param key
-	 * @param valueAdded
-	 * @return
-	 */
-	private Rule createRule(String key, String... days) {
-		RuleDay rule = new RuleDay(key);
-		rule.setPlace(PlaceKey.START);
-		rule.setDays(Lists.newArrayList(days));
-		return rule;
+	@Test
+	public void findVehicleByPlateTestCarIsNotNull() {
+		when(carRepository.findByPlate("M1"))
+			.thenReturn( new CarEntity(1L, "Combustion", new VehicleEntity("M1", "XX", "YY")) ); // el vihiculo esta registrado
+		when(motorbikeRepository.findByPlate("M1")).thenReturn( null );
+		
+		assertThat(controlVehicle.findVehicleByPlate("M1", carRepository, motorbikeRepository))
+			.isInstanceOf(Car.class);
 	}
+	
+	@Test
+	public void findVehicleByPlateTestMotorbikeIsNotNull() {
+		when(carRepository.findByPlate("M1")).thenReturn( null );
+		when(motorbikeRepository.findByPlate("M1"))
+			.thenReturn( new MotorbikeEntity(1L, 1000, new VehicleEntity("M1", "XX", "YY")) ); // el vihiculo esta registrado
+		
+		
+		assertThat(controlVehicle.findVehicleByPlate("M1", carRepository, motorbikeRepository))
+			.isInstanceOf(Motorbike.class);
+	}
+	
+	@Test
+	public void listAllVehiclesTest() {
+		List<CarEntity> carList = Lists.newArrayList(createCarEntity("M1"), createCarEntity("M2")); // Lista de carros
+		List<MotorbikeEntity> motoList = Lists.newArrayList(createMotorbikeEntity("M3"), createMotorbikeEntity("M4"));
+		
+		when(carRepository.findAllActiveVehicles()).thenReturn( carList );
+		when(motorbikeRepository.findAllActiveVehicles()).thenReturn( motoList );
+		
+		assertThat(controlVehicle.listAllVehicles(carRepository, motorbikeRepository))
+			.size()
+			.isEqualTo(4);
+		
+	}
+
 }
