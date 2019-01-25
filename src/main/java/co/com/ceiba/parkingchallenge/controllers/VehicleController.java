@@ -42,21 +42,21 @@ public class VehicleController {
 						() -> new NotRegisterVehicleException("Oops! No fue posible registrar el ingreso de la motocicleta"));
 	}
 	
-	@PostMapping("/car/save")							//---->	//OK
+	@PostMapping("/car/save")							
 	public Vehicle saveCar(@RequestBody Car car) {
 		return vehicleService.save(car)
 				.orElseThrow(
 						() -> new NotSaveModelException("Oops! No fue posible almacenar los datos del carro"));
 	}
 	
-	@PostMapping("/motorbike/save") 											//---->	//OK
+	@PostMapping("/motorbike/save") 											
 	public Vehicle saveMotorbike(@RequestBody Motorbike motorbike) {
 		return vehicleService.save(motorbike)
 				.orElseThrow(
 						() -> new NotSaveModelException("Oops! No fue posible almacenar los datos de la motocicleta"));
 	}
 	
-	@GetMapping("/all") 														//---->	//OK
+	@GetMapping("/all") 														
 	public List<Vehicle> listAllVehicles(){
 		return vehicleService.listAllVehicles()
 				.orElseThrow(

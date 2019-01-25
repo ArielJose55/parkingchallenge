@@ -221,5 +221,32 @@ public class ControlVehicleTest extends UtilUnit{
 			.isEqualTo(4);
 		
 	}
+	
+	@Test
+	public void validateRuleDayPlace() {
+		
+		List<String> days = Lists.newArrayList(LocalDateTime.now().getDayOfWeek().name());
+		
+		String key = "AM"; // key de una placa. simboliza un subcadena de una posible placa vehicular
+		
+		String placaStart = "AMM-45";
+		
+		String placaEnd = "M4-5AM";
+		
+		String placaContaint = "GAMM-45";
+		
+		RuleDay rule = new RuleDay("AM");
+		rule.setPlace(PlaceKey.START);
+		
+		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, days)).isEqualTo( true );
+		
+		rule.setPlace(PlaceKey.END);
+		
+		assertThat(rule.getPlace().verifyIfApplicable(placaEnd, key, days)).isEqualTo( true );
+		
+		rule.setPlace(PlaceKey.CONTAIN);
+		
+		assertThat(rule.getPlace().verifyIfApplicable(placaContaint, key, days)).isEqualTo( true );
+	}
 
 }

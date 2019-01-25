@@ -47,8 +47,9 @@ interface IControlVehicle {
 		for (Rule rule : rules) {
 			if (rule.getType().equals(Rule.Type.PLATE)) {
 				RuleDay ruleDay = (RuleDay) rule;
-				if (ruleDay.compare(ruleDay.getPlace(), vehicle.getPlate(), rule.getKey(), ruleDay.getDays()))
+				if (ruleDay.getPlace().verifyIfApplicable( vehicle.getPlate(), rule.getKey(), ruleDay.getDays())) {
 					throw new ViolatedConstraintException("Hoy, el vehiculo con esta: "+ vehicle.getPlate() +" NO esta autorizado para ingresar");
+				}
 				return;
 			}
 		}

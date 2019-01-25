@@ -18,17 +18,18 @@ import co.com.ceiba.parkingchallenge.models.Motorbike;
 import co.com.ceiba.parkingchallenge.models.Registration;
 import co.com.ceiba.parkingchallenge.services.RegistrationService;
 
-@CrossOrigin(origins = "http://localhost:4200")	
+@CrossOrigin(origins = "http://localhost:4200")	// 1 
 @RestController
 @RequestMapping("/registration")
 public class RegistrationController {
 
+	private static final String OOUPS_FUE_IMPOSIBLE_REGISTRAR_LA_SALIDA_DEL_ESTE_CARRO = "Ooups! Fue imposible registrar la salida del este carro";
 	@Autowired
 	private RegistrationService registerableService;
 	
 	@GetMapping("/actives") 																//---->	OK	
 	public List<Registration> listAllReservationsActives() {
-		return registerableService.listAllRegistrations()
+		return registerableService.listAllRegistrations() 
 				.orElseThrow(
 						() -> new NotFountModelException("No hay vehiculos activos en el parqueadero"));
 	}
@@ -37,7 +38,7 @@ public class RegistrationController {
 	public Invoice registerVehicularExit(@RequestBody Car car) {
 		return registerableService.registerVehicularExit(car)
 				.orElseThrow(
-						() -> new NotRegisterVehicleException("Ooups! Fue imposible registrar la salida del este carro"));
+						() -> new NotRegisterVehicleException(OOUPS_FUE_IMPOSIBLE_REGISTRAR_LA_SALIDA_DEL_ESTE_CARRO));
 	}
 	
 	@PostMapping("/bike/check-out") 														//---->	OK

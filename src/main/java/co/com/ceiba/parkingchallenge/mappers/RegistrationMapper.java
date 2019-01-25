@@ -22,6 +22,7 @@ public final class RegistrationMapper {
 	}
 	
 	public static Registration mapperToModel(RegistrationEntity entity, List<CarEntity> carEntities, List<MotorbikeEntity> motorbikeEntities) {
+		
 		Registration model = new Registration();
 		model.setId(entity.getId());
 		model.setRegistrationDate(entity.getRegistrationDate());
@@ -30,13 +31,16 @@ public final class RegistrationMapper {
 		long countCar = carEntities.stream().filter(c -> c.getVehicleEntity().getPlate().equals(entity.getVehicleEntity().getPlate())).count();
 		long countBike = motorbikeEntities.stream().filter(c -> c.getVehicleEntity().getPlate().equals(entity.getVehicleEntity().getPlate())).count();
 		
-		if(countCar != 0 && countBike != 0)
+		if(countCar != 0 && countBike != 0) {
 			throw new ViolatedConstraintException("Existe un carro y una moto esta misma placa");
+		}
 		
 		if(countCar != 0) { //Es un carro
 			
 			// Si existe mas de una coincidencia entonces hay incosistencia de datos, no puede haber mas de un carro con la misma placa activo
-			if(countCar > 1) throw new ViolatedConstraintException("Hay registrados mas de un carro con esta placa: " + entity.getVehicleEntity().getPlate()); 
+			if(countCar > 1) {
+				throw new ViolatedConstraintException("Hay registrados mas de un carro con esta placa: " + entity.getVehicleEntity().getPlate()); 
+			}
 			
 			Optional<CarEntity> car = carEntities
 					.stream()
@@ -50,9 +54,11 @@ public final class RegistrationMapper {
 		if (countBike != 0) {
 			// Si existe mas de una coincidencia entonces hay incosistencia de datos, no
 			// puede haber mas de un carro con la misma placa activo
-			if (countBike > 1)
+			if (countBike > 1) {
 				throw new ViolatedConstraintException("Hay registrados mas de una motocicleta con esta placa: "
 						+ entity.getVehicleEntity().getPlate());
+			}
+						
 
 			Optional<MotorbikeEntity> bike = motorbikeEntities.stream()
 					.filter(c -> c.getVehicleEntity().getPlate().equals(entity.getVehicleEntity().getPlate()))

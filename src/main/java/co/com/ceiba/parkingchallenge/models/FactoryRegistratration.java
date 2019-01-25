@@ -6,7 +6,7 @@ import co.com.ceiba.parkingchallenge.entities.RegistrationEntity;
 import co.com.ceiba.parkingchallenge.entities.StateType;
 import co.com.ceiba.parkingchallenge.mappers.VehicleMapper;
 
-public class FactoryRegistratration {
+public final class FactoryRegistratration {
 	
 	private FactoryRegistratration() {}
 
