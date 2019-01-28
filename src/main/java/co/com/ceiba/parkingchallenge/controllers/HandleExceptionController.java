@@ -37,7 +37,7 @@ public class HandleExceptionController {
 	
 	@ExceptionHandler(Exception.class)
 	public final ResponseEntity<ExceptionResponse> handleAllExceptions(Exception ex, WebRequest request) {
-		ExceptionResponse errorDetails = new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(true));
+		ExceptionResponse errorDetails = new ExceptionResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
 	  return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 	

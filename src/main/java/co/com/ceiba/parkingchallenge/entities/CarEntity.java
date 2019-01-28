@@ -12,11 +12,9 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name="CARS")
-@Setter
 @Getter
 @AllArgsConstructor
 public class CarEntity {

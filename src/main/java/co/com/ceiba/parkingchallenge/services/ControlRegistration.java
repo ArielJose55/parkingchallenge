@@ -30,6 +30,8 @@ import co.com.ceiba.parkingchallenge.services.calculation.ICalculation;
 @Component
 public class ControlRegistration implements IControlRegistration {
 
+	
+	
 	@Override
 	public List<Registration> listAllRegistrations(RegistrationRepository registrationRepository,
 			CarRepository carRepository, MotorbikeRepository motorbikeRepository) {

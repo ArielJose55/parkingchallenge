@@ -59,7 +59,7 @@ public class RegistrationControllerTest extends UtilIntegration {
 	@Test
 	public void listAllReservationsActivesTest() throws Exception {
 
-		mvc.perform(get(createUrl(port, "/registration/actives")).contentType(MediaType.APPLICATION_JSON))
+		mvc.perform(get(createUrl(port, "/active")).contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk()).andDo(print());
 	}
 
@@ -75,7 +75,7 @@ public class RegistrationControllerTest extends UtilIntegration {
 
 		assertThat(vehicleService.registerVehicle(car).isPresent()).isEqualTo(true);
 
-		mvc.perform(post(createUrl(port, "/registration/car/check-out")).contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post(createUrl(port, "/car/check-out")).contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(car))).andExpect(status().isOk());
 	}
 
@@ -88,7 +88,7 @@ public class RegistrationControllerTest extends UtilIntegration {
 
 		assertThat(vehicleService.registerVehicle(motorbike).isPresent()).isEqualTo(true);
 		
-		mvc.perform(post(createUrl(port, "/registration/bike/check-out")).contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post(createUrl(port, "/motorbike/check-out")).contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(motorbike))).andExpect(status().is(400))
 				.andExpect(jsonPath("message", is("No existe tarrifa aplicable para este vehiculo para 0 horas u horas")));
 	}
@@ -105,7 +105,7 @@ public class RegistrationControllerTest extends UtilIntegration {
 
 		assertThat(vehicleService.registerVehicle(motorbike).isPresent()).isEqualTo(true);
 		
-		mvc.perform(post(createUrl(port, "/registration/bike/check-out")).contentType(MediaType.APPLICATION_JSON)
+		mvc.perform(post(createUrl(port, "/motorbike/check-out")).contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(motorbike))).andExpect(status().isOk());
 				
 	}

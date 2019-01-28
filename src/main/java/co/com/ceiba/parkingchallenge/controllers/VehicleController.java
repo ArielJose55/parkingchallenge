@@ -22,51 +22,58 @@ import co.com.ceiba.parkingchallenge.services.VehicleService;
 
 @CrossOrigin(origins = "http://localhost:4200")	
 @RestController
-@RequestMapping("/vehicle")
+@RequestMapping
 public class VehicleController {
+	
+	
+	private static final String NO_SE_ENCONTRO_VEHICULO_REGISTRADO = "No se encontro ningun vehiculo registrado con esta placa";
+	private static final String NO_SE_ENCONTRARON_VEHICULOS_ACTIVOS_EN_EL_PARQUEADERO = "No se encontraron vehiculos activos en el parqueadero";
+	private static final String NO_FUE_POSIBLE_ALMACENAR_EL_VEHICULO = "Oops! No fue posible almacenar los datos del vehiculo";
+	private static final String NO_FUE_POSIBLE_EL_INGRESO_DEL_VEHICULO = "Oops! No fue posible registrar el ingreso del vehiculo";
+	
 	
 	@Autowired
 	private VehicleService vehicleService;
 	
-	@PostMapping("/car/register") 												//---->	OK
+	@PostMapping("/car/register") 												
 	public Registration register(@RequestBody Car vehicle) {
 		return vehicleService.registerVehicle(vehicle)
 				.orElseThrow(
-						() -> new NotRegisterVehicleException("Oops! No fue posible registrar el ingreso del carro"));
+						() -> new NotRegisterVehicleException(NO_FUE_POSIBLE_EL_INGRESO_DEL_VEHICULO));
 	}
 	
-	@PostMapping("/motorbike/register") 										//---->	//OK
+	@PostMapping("/motorbike/register") 										
 	public Registration register(@RequestBody Motorbike vehicle) {
 		return vehicleService.registerVehicle(vehicle)
 				.orElseThrow(
-						() -> new NotRegisterVehicleException("Oops! No fue posible registrar el ingreso de la motocicleta"));
+						() -> new NotRegisterVehicleException(NO_FUE_POSIBLE_EL_INGRESO_DEL_VEHICULO));
 	}
 	
-	@PostMapping("/car/save")							
-	public Vehicle saveCar(@RequestBody Car car) {
+	@PostMapping("/car")							
+	public Vehicle save(@RequestBody Car car) {
 		return vehicleService.save(car)
 				.orElseThrow(
-						() -> new NotSaveModelException("Oops! No fue posible almacenar los datos del carro"));
+						() -> new NotSaveModelException(NO_FUE_POSIBLE_ALMACENAR_EL_VEHICULO));
 	}
 	
-	@PostMapping("/motorbike/save") 											
-	public Vehicle saveMotorbike(@RequestBody Motorbike motorbike) {
+	@PostMapping("/motorbike") 											
+	public Vehicle save(@RequestBody Motorbike motorbike) {
 		return vehicleService.save(motorbike)
 				.orElseThrow(
-						() -> new NotSaveModelException("Oops! No fue posible almacenar los datos de la motocicleta"));
+						() -> new NotSaveModelException(NO_FUE_POSIBLE_ALMACENAR_EL_VEHICULO));
 	}
 	
-	@GetMapping("/all") 														
-	public List<Vehicle> listAllVehicles(){
+	@GetMapping() 														
+	public List<Vehicle> listAll(){
 		return vehicleService.listAllVehicles()
 				.orElseThrow(
-						() -> new NotFountModelException("No se encontraron vehiculos activos en el parqueadero"));
+						() -> new NotFountModelException(NO_SE_ENCONTRARON_VEHICULOS_ACTIVOS_EN_EL_PARQUEADERO));
 	}
 	
 	@GetMapping("/{plate}")	
-	public Vehicle findVehicleByPlate(@PathVariable String plate) {
+	public Vehicle findByPlate(@PathVariable String plate) {
 		return vehicleService.getVehicle(plate)
 				.orElseThrow(
-						() -> new NotFountModelException("No se encontro ningun vehiculo registrado con esta placa: " + plate));
+						() -> new NotFountModelException( NO_SE_ENCONTRO_VEHICULO_REGISTRADO ));
 	}
 }

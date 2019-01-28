@@ -1,10 +1,8 @@
 package co.com.ceiba.parkingchallenge.models;
 
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 public class Rule {
 
 	protected String key;

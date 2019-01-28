@@ -54,13 +54,13 @@ public class VehicleControllerTest extends UtilIntegration {
 	public void saveMotorbikeTest() throws Exception {
 		Motorbike motorbike = createVehicle("M41-41", 1000);
 		
-		mvc.perform(post(createUrl(port, "/vehicle/motorbike/save"))
+		mvc.perform(post(createUrl(port, "/motorbike"))
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(motorbike)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("plate", is("M41-41")));
 		
-		mvc.perform(post(createUrl(port, "/vehicle/car/save"))
+		mvc.perform(post(createUrl(port, "/car"))
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(motorbike)))
 				.andExpect(status().is(500))
@@ -71,13 +71,13 @@ public class VehicleControllerTest extends UtilIntegration {
 	public void saveCarTest() throws Exception {
 		Car car = createVehicle("M41-42", "Combustion");
 		
-		mvc.perform(post(createUrl(port, "/vehicle/car/save"))
+		mvc.perform(post(createUrl(port, "/car"))
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(car)))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("plate", is("M41-42")));
 		
-		mvc.perform(post(createUrl(port, "/vehicle/car/save"))
+		mvc.perform(post(createUrl(port, "/car"))
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(car)))
 				.andExpect(status().is(500))
@@ -91,7 +91,7 @@ public class VehicleControllerTest extends UtilIntegration {
 		
 		assertThat(vehicleService.save(car).isPresent()).isEqualTo(true);
 		
-		mvc.perform(get(createUrl(port, "/vehicle/{plate}"), "M41-43")
+		mvc.perform(get(createUrl(port, "/{plate}"), "M41-43")
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk());
 	}
@@ -102,7 +102,7 @@ public class VehicleControllerTest extends UtilIntegration {
 		
 		assertThat(vehicleService.save(car).isPresent()).isEqualTo(true);
 		
-		mvc.perform(post(createUrl(port, "/vehicle/car/register"))
+		mvc.perform(post(createUrl(port, "/car/register"))
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(car)))
 				.andExpect(status().isOk())
@@ -117,7 +117,7 @@ public class VehicleControllerTest extends UtilIntegration {
 		
 		assertThat(vehicleService.save(motorbike).isPresent()).isEqualTo(true);
 		
-		mvc.perform(post(createUrl(port, "/vehicle/motorbike/register"))
+		mvc.perform(post(createUrl(port, "/motorbike/register"))
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(mapper.writeValueAsBytes(motorbike)))
 				.andExpect(status().isOk())
@@ -128,7 +128,7 @@ public class VehicleControllerTest extends UtilIntegration {
 	@Test
 	public void findAllVehicleTest() throws Exception {
 		
-		 mvc.perform(get(createUrl(port, "/vehicle/all"))
+		 mvc.perform(get(createUrl(port, "/"))
 			      .contentType(MediaType.APPLICATION_JSON))
 			      .andExpect(status().isOk());
 

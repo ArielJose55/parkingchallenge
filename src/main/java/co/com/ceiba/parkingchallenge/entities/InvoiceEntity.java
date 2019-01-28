@@ -18,11 +18,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name="CHECKS")
-@Setter
 @Getter
 @AllArgsConstructor
 public class InvoiceEntity {

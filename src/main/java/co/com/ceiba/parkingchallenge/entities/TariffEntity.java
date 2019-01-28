@@ -9,12 +9,10 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name="TARIFFS")
 @Getter
-@Setter
 @AllArgsConstructor
 public class TariffEntity {
 	

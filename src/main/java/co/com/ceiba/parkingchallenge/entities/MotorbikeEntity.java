@@ -14,11 +14,9 @@ import javax.validation.constraints.Min;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Entity
 @Table(name="MOTORBIKES")
-@Setter
 @Getter
 @AllArgsConstructor
 public class MotorbikeEntity {
