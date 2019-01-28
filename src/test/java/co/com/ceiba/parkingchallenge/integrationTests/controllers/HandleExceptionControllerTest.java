@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.junit4.SpringRunner;
 
 
@@ -30,7 +29,7 @@ public class HandleExceptionControllerTest extends UtilIntegration{
 	public void hadndleExceptionNotFount() {
 		
 		Car car = (Car) createVehicleCar("MM3451");
-		CarEntity carEntity = createCarEntity("MLÑFF1");
+		CarEntity carEntity = createCarEntity("MLOFF1");
 		
 		when(carRepository.save(carEntity)).thenReturn( null );
 		
