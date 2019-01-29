@@ -109,5 +109,5 @@ public class RegistrationControllerTest extends UtilIntegration {
 				.content(mapper.writeValueAsBytes(motorbike))).andExpect(status().isOk());
 				
 	}
-	
+		
 }

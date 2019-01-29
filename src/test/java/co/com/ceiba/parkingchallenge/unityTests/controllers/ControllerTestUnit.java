@@ -100,7 +100,7 @@ public class ControllerTestUnit extends UtilUnit{
 	
 	
 	@Test
-	public void ThrowExceptionsRegistrationControllerTest() {
+	public void throwExceptionsRegistrationControllerTest() {
 		Car car = (Car) createVehicleCar("M1");
 		Motorbike moto = (Motorbike) createVehicleMotorbike("M2");
 		when( registerableService.listAllRegistrations() ).thenReturn( Optional.empty() ); 
@@ -127,4 +127,5 @@ public class ControllerTestUnit extends UtilUnit{
 				.hasMessage("Ooups! Fue imposible registrar la salida del este vehiculo");
 		}
 	}
+	
 }

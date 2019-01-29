@@ -133,8 +133,5 @@ public class VehicleControllerTest extends UtilIntegration {
 			      .andExpect(status().isOk());
 
 	}
-	
-	
-	
-	
+		
 }
