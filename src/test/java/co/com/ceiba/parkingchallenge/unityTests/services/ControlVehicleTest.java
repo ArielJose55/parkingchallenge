@@ -28,6 +28,7 @@ import co.com.ceiba.parkingchallenge.models.Motorbike;
 import co.com.ceiba.parkingchallenge.models.Rule;
 import co.com.ceiba.parkingchallenge.models.RuleDay;
 import co.com.ceiba.parkingchallenge.models.RuleDay.PlaceKey;
+import co.com.ceiba.parkingchallenge.models.RuleDisplacement;
 import co.com.ceiba.parkingchallenge.models.Vehicle;
 import co.com.ceiba.parkingchallenge.repositories.CarRepository;
 import co.com.ceiba.parkingchallenge.repositories.ConstraintRepository;
@@ -225,7 +226,8 @@ public class ControlVehicleTest extends UtilUnit{
 	@Test
 	public void validateRuleDayPlace() {
 		
-		List<String> days = Lists.newArrayList(LocalDateTime.now().getDayOfWeek().name());
+		List<String> daysApply = Lists.newArrayList(LocalDateTime.now().getDayOfWeek().name());
+		List<String> daysNoApply = Lists.newArrayList(LocalDateTime.now().minusDays(1).getDayOfWeek().name());
 		
 		String key = "AM"; // key de una placa. simboliza un subcadena de una posible placa vehicular
 		
@@ -238,15 +240,28 @@ public class ControlVehicleTest extends UtilUnit{
 		RuleDay rule = new RuleDay("AM");
 		rule.setPlace(PlaceKey.START);
 		
-		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, days)).isEqualTo( true );
+		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, daysApply)).isEqualTo( true );
+		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, daysNoApply)).isEqualTo( false );
 		
 		rule.setPlace(PlaceKey.END);
 		
-		assertThat(rule.getPlace().verifyIfApplicable(placaEnd, key, days)).isEqualTo( true );
+		assertThat(rule.getPlace().verifyIfApplicable(placaEnd, key, daysApply)).isEqualTo( true );
+		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, daysNoApply)).isEqualTo( false );
 		
 		rule.setPlace(PlaceKey.CONTAIN);
 		
-		assertThat(rule.getPlace().verifyIfApplicable(placaContaint, key, days)).isEqualTo( true );
+		assertThat(rule.getPlace().verifyIfApplicable(placaContaint, key, daysApply)).isEqualTo( true );
+		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, daysNoApply)).isEqualTo( false );
+	}
+	
+	@Test
+	public void ruleDisceplamentApplyTest() {
+		
+		RuleDisplacement rule = new RuleDisplacement("500");
+		rule.setValueAdded(500.0);
+		
+		assertThat(rule.isApplyRule(1000)).isEqualTo(true);
+		assertThat(rule.isApplyRule(200)).isEqualTo(false);
 	}
 
 }
