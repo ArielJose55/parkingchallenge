@@ -24,6 +24,7 @@ import co.com.ceiba.parkingchallenge.entities.StateType;
 import co.com.ceiba.parkingchallenge.entities.VehicleEntity;
 import co.com.ceiba.parkingchallenge.exceptions.ViolatedConstraintException;
 import co.com.ceiba.parkingchallenge.models.Car;
+import co.com.ceiba.parkingchallenge.models.FactoryRegistratration;
 import co.com.ceiba.parkingchallenge.models.Motorbike;
 import co.com.ceiba.parkingchallenge.models.Rule;
 import co.com.ceiba.parkingchallenge.models.RuleDay;
@@ -264,4 +265,12 @@ public class ControlVehicleTest extends UtilUnit{
 		assertThat(rule.isApplyRule(200)).isEqualTo(false);
 	}
 
+	@Test
+	public void testFactoryRegistration() {
+		Vehicle car = createVehicleCar("MMM123");
+		StateType state = StateType.ACTIVE;
+		RegistrationEntity registrationEntity = FactoryRegistratration.create(state, car);
+		assertThat(registrationEntity.getVehicleEntity().getPlate()).isEqualTo(car.getPlate());
+		
+	}
 }

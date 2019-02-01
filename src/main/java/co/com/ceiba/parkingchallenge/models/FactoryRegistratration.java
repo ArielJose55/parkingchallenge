@@ -12,9 +12,11 @@ public final class FactoryRegistratration {
 
 	public static RegistrationEntity create(StateType state, Vehicle vehicle) {
 		RegistrationEntity registration = new RegistrationEntity();
+		registration.setId(null);
 		registration.setRegistrationDate(LocalDateTime.now());
 		registration.setState(state);
 		registration.setVehicleEntity(VehicleMapper.mapperToEntity(vehicle));
+		
 		return registration;
 	}
 }
