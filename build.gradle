@@ -38,3 +38,10 @@ dependencies {
 	testImplementation 'org.assertj:assertj-core:3.11.1'
 	testImplementation 'commons-lang:commons-lang:2.6'
 }
+
+task copyDepJars(type: Copy) { 
+	from configurations.compile 
+ 	into 'build/lib/' 
+}
+
+build.finalizedBy(copyDepJars)
