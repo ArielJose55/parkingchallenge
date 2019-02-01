@@ -43,5 +43,3 @@ task copyDepJars(type: Copy) {
 	from configurations.compile 
  	into 'build/lib/' 
 }
-
-build.finalizedBy(copyDepJars)

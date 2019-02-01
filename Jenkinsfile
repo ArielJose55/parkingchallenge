@@ -39,6 +39,7 @@ pipeline {
 			steps{
 				echo "------------>> Unit Tests has started <<------------"
 				sh 'gradle test'
+				sh 'gradle copyDepJars'
 				junit '**/build/test-results/test/*.xml' 
 				step( [ $class: 'JacocoPublisher' ] )
 			}
