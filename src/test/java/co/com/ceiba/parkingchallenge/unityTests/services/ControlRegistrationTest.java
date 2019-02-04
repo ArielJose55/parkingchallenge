@@ -81,7 +81,7 @@ public class ControlRegistrationTest extends UtilUnit {
 		when(motorbikeRepository.findAllActiveVehicles()).thenReturn(motoList);
 		when(registrationRepository.listAllRegistrationActive()).thenReturn(registrationActiveList);
 		
-		assertThat(controlRegistration.listAllRegistrations(registrationRepository, carRepository, motorbikeRepository))
+		assertThat(controlRegistration.listAllRegistrations())
 			.filteredOn(r -> r.getState().equals(StateType.ACTIVE))
 			.size()
 			.isEqualTo(3);
@@ -94,8 +94,7 @@ public class ControlRegistrationTest extends UtilUnit {
 		
 		try {
 			
-			controlRegistration.registerCheckOutVehicular(vehicle, registrationRepository,
-								carRepository, motorbikeRepository, invoiceRepository, tariffRepository);
+			controlRegistration.registerCheckOutVehicular( vehicle );
 			
 			fail("NotFountModelException experada porque no se encontro el vehiculo con placa M1 en el parqueadero");
 		}catch (NotFountModelException e) {

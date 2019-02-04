@@ -18,40 +18,36 @@ import co.com.ceiba.parkingchallenge.repositories.RegistrationRepository;
 import co.com.ceiba.parkingchallenge.repositories.TariffRepository;
 
 
-
+/**
+ * 
+ * 
+ * @author ariel.arnedo
+ *
+ */
 @Service
 public class RegistrationService {
 
-	@Autowired
-	private RegistrationRepository registrationRepository;
-	
-	@Autowired
-	private CarRepository carRepository;
-	
-	@Autowired
-	private MotorbikeRepository motorbikeRepository;
-	
-	@Autowired
-	private InvoiceRepository invoiceRepository;
-	
-	@Autowired
-	private TariffRepository tariffRepository;
-	
 	@Autowired
 	private ControlRegistration controlRegistration;
 	
 	/**
 	 * 
+	 * 
 	 * @return
 	 */
 	public Optional<List<Registration>> listAllRegistrations(){
 		return Optional.ofNullable(controlRegistration
-				.listAllRegistrations(registrationRepository, carRepository, motorbikeRepository));
+				.listAllRegistrations());
 	}
 	
+	/**
+	 * 
+	 * 
+	 * @param vehicle
+	 * @return
+	 */
 	public Optional<Invoice> registerVehicularExit(Vehicle vehicle){
-		return Optional.ofNullable(controlRegistration
-				.registerCheckOutVehicular(vehicle, registrationRepository, carRepository,
-						motorbikeRepository, invoiceRepository, tariffRepository));
+		return Optional.ofNullable( controlRegistration
+				.registerCheckOutVehicular ( vehicle ));
 	}
 }

@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import co.com.ceiba.parkingchallenge.entities.CarEntity;
@@ -28,23 +29,33 @@ import co.com.ceiba.parkingchallenge.services.calculation.CalculationPaymentMoto
 import co.com.ceiba.parkingchallenge.services.calculation.ICalculation;
 
 @Component
-public class ControlRegistration implements IControlRegistration {
+public class ControlRegistration {
 
+	@Autowired
+	private RegistrationRepository registrationRepository;
 	
+	@Autowired
+	private CarRepository carRepository;
 	
-	@Override
-	public List<Registration> listAllRegistrations(RegistrationRepository registrationRepository,
-			CarRepository carRepository, MotorbikeRepository motorbikeRepository) {
+	@Autowired
+	private MotorbikeRepository motorbikeRepository;
+	
+	@Autowired
+	private InvoiceRepository invoiceRepository;
+	
+	@Autowired
+	private TariffRepository tariffRepository;
+	
+
+	public List<Registration> listAllRegistrations() {
 		List<CarEntity> carList = carRepository.findAllActiveVehicles();
 		List<MotorbikeEntity> motorBike = motorbikeRepository.findAllActiveVehicles();
 		return registrationRepository.listAllRegistrationActive().stream()
 				.map(r -> RegistrationMapper.mapperToModel(r, carList, motorBike)).collect(Collectors.toList());
 	}
 
-	@Override
-	public Invoice registerCheckOutVehicular(Vehicle vehicle, RegistrationRepository registrationRepository, CarRepository carRepository,
-			MotorbikeRepository motorbikeRepository, InvoiceRepository invoiceRepository,
-			TariffRepository tariffRepository) {
+
+	public Invoice registerCheckOutVehicular( Vehicle vehicle ) {
 		RegistrationEntity reEntity = registrationRepository.findRegistrationActive(vehicle.getPlate());
 
 		if (reEntity != null) {
