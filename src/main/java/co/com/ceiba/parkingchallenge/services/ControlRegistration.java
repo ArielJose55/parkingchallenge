@@ -50,8 +50,10 @@ public class ControlRegistration {
 	public List<Registration> listAllRegistrations() {
 		List<CarEntity> carList = carRepository.findAllActiveVehicles();
 		List<MotorbikeEntity> motorBike = motorbikeRepository.findAllActiveVehicles();
-		return registrationRepository.listAllRegistrationActive().stream()
-				.map(r -> RegistrationMapper.mapperToModel(r, carList, motorBike)).collect(Collectors.toList());
+		return registrationRepository.listAllRegistrationActive()
+				.stream()
+				.map(r -> RegistrationMapper.mapperToModel(r, carList, motorBike))
+				.collect(Collectors.toList());
 	}
 
 

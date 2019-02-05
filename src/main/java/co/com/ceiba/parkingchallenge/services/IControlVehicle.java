@@ -20,18 +20,63 @@ import co.com.ceiba.parkingchallenge.repositories.RegistrationRepository;
  */
 interface IControlVehicle {
 	
+	/**
+	 * 
+	 * @param vehicle
+	 * @param constraintRepository
+	 * @param registrationRepository
+	 * @return
+	 */
 	Registration registerVehicle(Vehicle vehicle, ConstraintRepository constraintRepository, RegistrationRepository registrationRepository);
 	
+	/**
+	 * 
+	 * @param vehicle
+	 * @param constraintRepository
+	 * @param registrationRepository
+	 * @return
+	 */
 	RegistrationEntity validateRegister(Vehicle vehicle, ConstraintRepository constraintRepository, RegistrationRepository registrationRepository);
 	
+	/**
+	 * 
+	 * @param carRepository
+	 * @param motorbikeRepository
+	 * @return
+	 */
 	List<Vehicle> listAllVehicles(CarRepository carRepository, MotorbikeRepository motorbikeRepository);
 	
+	/**
+	 * 
+	 * @param vehicle
+	 * @param carRepository
+	 * @param motorbikeRepository
+	 * @return
+	 */
 	Vehicle saveVehicle(Vehicle vehicle, CarRepository carRepository, MotorbikeRepository motorbikeRepository);
 	
+	/**
+	 * 
+	 * @param plate
+	 * @param carRepository
+	 * @param motorbikeRepository
+	 * @return
+	 */
 	Vehicle findVehicleByPlate(String plate, CarRepository carRepository, MotorbikeRepository motorbikeRepository);
 	
+	/**
+	 * 
+	 * @param plate
+	 * @param registrationRepository
+	 * @return
+	 */
 	RegistrationEntity verifyActiveRegistration(String plate, RegistrationRepository registrationRepository);
 	
+	/**
+	 * 
+	 * @param vehicle
+	 * @param registrationRepository
+	 */
 	default void applyRuleVehicleActive(Vehicle vehicle, RegistrationRepository registrationRepository) {
 		if(registrationRepository.findRegistrationActive(vehicle.getPlate()) != null)
 			throw new ViolatedConstraintException("Este Vehiculo ya se encuentra en el parqueadero");

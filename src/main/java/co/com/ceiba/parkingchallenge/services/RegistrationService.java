@@ -11,11 +11,6 @@ import co.com.ceiba.parkingchallenge.models.Invoice;
 
 import co.com.ceiba.parkingchallenge.models.Registration;
 import co.com.ceiba.parkingchallenge.models.Vehicle;
-import co.com.ceiba.parkingchallenge.repositories.CarRepository;
-import co.com.ceiba.parkingchallenge.repositories.InvoiceRepository;
-import co.com.ceiba.parkingchallenge.repositories.MotorbikeRepository;
-import co.com.ceiba.parkingchallenge.repositories.RegistrationRepository;
-import co.com.ceiba.parkingchallenge.repositories.TariffRepository;
 
 
 /**

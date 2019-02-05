@@ -2,6 +2,7 @@ package co.com.ceiba.parkingchallenge.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,6 +15,7 @@ import co.com.ceiba.parkingchallenge.models.Rule;
 import co.com.ceiba.parkingchallenge.models.RuleDay;
 import co.com.ceiba.parkingchallenge.models.RuleDay.PlaceKey;
 import co.com.ceiba.parkingchallenge.models.RuleDisplacement;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Clase para obtener reglas a partir de un archivo XML
@@ -21,6 +23,7 @@ import co.com.ceiba.parkingchallenge.models.RuleDisplacement;
  * @author ariel.arnedo
  *
  */
+@Slf4j
 public class ReaderContraintXml implements IReaderRule {
 
 	
@@ -32,6 +35,7 @@ public class ReaderContraintXml implements IReaderRule {
 		try {
 			document = reader.build(fileRules);
 		} catch (JDOMException | IOException e) {
+			log.error(MessageFormat.format("El archivo {0} que contiene las reglas no fue encontrado" , fileRules.getName()));
 			throw new UnsupportedOperationException("Error al leer archivo " + fileRules.getName(), e);
 		}
 		
