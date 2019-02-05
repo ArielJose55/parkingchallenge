@@ -101,5 +101,5 @@ public class ControlRegistrationTest extends UtilUnit {
 			assertThat(e).
 				hasMessage("El vehiculo con esta placa " + vehicle.getPlate() + " no se encuentre en el parqueadero");
 		}
-	}
+	}	
 }

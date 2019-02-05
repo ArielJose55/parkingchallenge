@@ -95,7 +95,6 @@ interface IControlVehicle {
 				if (ruleDay.getPlace().verifyIfApplicable( vehicle.getPlate(), rule.getKey(), ruleDay.getDays())) {
 					throw new ViolatedConstraintException("Hoy, el vehiculo con esta: "+ vehicle.getPlate() +" NO esta autorizado para ingresar");
 				}
-				return;
 			}
 		}
 	}

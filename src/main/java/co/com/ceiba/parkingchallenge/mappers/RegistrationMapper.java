@@ -42,13 +42,13 @@ public final class RegistrationMapper {
 				throw new ViolatedConstraintException("Hay registrados mas de un carro con esta placa: " + entity.getVehicleEntity().getPlate()); 
 			}
 			
-			Optional<CarEntity> car = carEntities
+			CarEntity car = carEntities
 					.stream()
 					.filter(c -> c.getVehicleEntity().getPlate().equals(entity.getVehicleEntity().getPlate()))
-					.findFirst();
+					.findFirst()
+					.orElse(null);  
 			
-			model.setVehicle( car.isPresent() ? VehicleMapper.mapperOfEntity(car.get()) : null );
-			
+			model.setVehicle(VehicleMapper.mapperOfEntity(car));	
 		}
 			
 		if (countBike != 0) {
@@ -57,14 +57,15 @@ public final class RegistrationMapper {
 			if (countBike > 1) {
 				throw new ViolatedConstraintException("Hay registrados mas de una motocicleta con esta placa: "
 						+ entity.getVehicleEntity().getPlate());
-			}
-						
+			}		
 
-			Optional<MotorbikeEntity> bike = motorbikeEntities.stream()
+			MotorbikeEntity bike = motorbikeEntities
+					.stream()
 					.filter(c -> c.getVehicleEntity().getPlate().equals(entity.getVehicleEntity().getPlate()))
-					.findFirst();
+					.findFirst()
+					.orElse(null);
 
-			model.setVehicle(bike.isPresent() ? VehicleMapper.mapperOfEntity(bike.get()) : null);
+			model.setVehicle(VehicleMapper.mapperOfEntity(bike));
 		}
 		
 		return model;

@@ -14,6 +14,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.collect.Lists;
 
+import co.com.ceiba.parkingchallenge.common.UtilUnit;
 import co.com.ceiba.parkingchallenge.entities.CarEntity;
 import co.com.ceiba.parkingchallenge.entities.InvoiceEntity;
 import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;
@@ -30,7 +31,7 @@ import co.com.ceiba.parkingchallenge.models.Registration;
 import co.com.ceiba.parkingchallenge.models.Vehicle;
 
 @RunWith(SpringRunner.class)
-public class MapperTest {
+public class MapperTest extends UtilUnit{
 
 	@Rule
 	public final JUnitSoftAssertions mapperEntitysNulls = new JUnitSoftAssertions();
