@@ -247,12 +247,12 @@ public class ControlVehicleTest extends UtilUnit{
 		rule.setPlace(PlaceKey.END);
 		
 		assertThat(rule.getPlace().verifyIfApplicable(placaEnd, key, daysApply)).isEqualTo( true );
-		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, daysNoApply)).isEqualTo( false );
+		assertThat(rule.getPlace().verifyIfApplicable(placaEnd, key, daysNoApply)).isEqualTo( false );
 		
 		rule.setPlace(PlaceKey.CONTAIN);
 		
 		assertThat(rule.getPlace().verifyIfApplicable(placaContaint, key, daysApply)).isEqualTo( true );
-		assertThat(rule.getPlace().verifyIfApplicable(placaStart, key, daysNoApply)).isEqualTo( false );
+		assertThat(rule.getPlace().verifyIfApplicable(placaContaint, key, daysNoApply)).isEqualTo( false );
 	}
 	
 	@Test

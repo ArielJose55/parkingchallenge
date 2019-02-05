@@ -219,7 +219,7 @@ public class CalculationTest extends UtilUnit{
 	}
 	
 	@Test
-	public void calculateTariffsNoNull() {
+	public void calculateTariffsNoNullHour() {
 		ICalculation calculator = new CalculationPaymentCar();
 		
 		RegistrationEntity registrationEntity = new RegistrationEntity(1L,
@@ -234,6 +234,28 @@ public class CalculationTest extends UtilUnit{
 						.collect(Collectors.toList())); // Aqui se filtran las tarifas para que queden solo las de 24 horas
 			
 			fail("ViolatedConstraintException experada porque solo existen tarrifas de 24 horas aplicables, faltando las de una hora");
+		}catch (ViolatedConstraintException e) {
+			assertThat(e)
+				.hasMessageStartingWith("No existen tarrifas aplicables para este vehiculo");
+		}
+	}
+	
+	@Test
+	public void calculateTariffsNoNullDay() {
+		ICalculation calculator = new CalculationPaymentCar();
+		
+		RegistrationEntity registrationEntity = new RegistrationEntity(1L,
+													LocalDateTime.now().minusDays(1).minusHours(4), // para comparar 1 dia y 4 horas
+													StateType.ACTIVE, null); 
+		
+		try {
+			calculator.calculateAmountToPay(registrationEntity,
+					null,
+					tariffs.stream()
+						.filter(t -> t.getNumberHours() == 1) // Solo hay tariff aplicadas para 1 hora, mas no de 24 horas
+						.collect(Collectors.toList())); // Aqui se filtran las tarifas para que queden solo las de 1 hora
+			
+			fail("ViolatedConstraintException experada porque solo existen tarrifas de 1 horas aplicables, faltando las de 24 horas");
 		}catch (ViolatedConstraintException e) {
 			assertThat(e)
 				.hasMessageStartingWith("No existen tarrifas aplicables para este vehiculo");
