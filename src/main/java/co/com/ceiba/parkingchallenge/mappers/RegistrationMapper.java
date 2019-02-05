@@ -1,7 +1,6 @@
 package co.com.ceiba.parkingchallenge.mappers;
 
 import java.util.List;
-import java.util.Optional;
 
 import co.com.ceiba.parkingchallenge.entities.CarEntity;
 import co.com.ceiba.parkingchallenge.entities.MotorbikeEntity;

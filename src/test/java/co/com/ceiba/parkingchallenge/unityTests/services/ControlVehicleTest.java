@@ -273,4 +273,5 @@ public class ControlVehicleTest extends UtilUnit{
 		assertThat(registrationEntity.getVehicleEntity().getPlate()).isEqualTo(car.getPlate());
 		
 	}
+
 }

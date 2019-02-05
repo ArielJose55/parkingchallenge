@@ -38,8 +38,10 @@ public interface ICalculation {
 
 		if ( hours <= TariffApply.HOUR_LIMETE_START_DAY.getVelue() ) {// cobrar por hora
 
-			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs).stream() 
-						.filter(t -> t.getNumberHours() == TariffApply.BY_HOUR.getVelue() ).findFirst(); // encuentra una tarrifa aplicable para una hora
+			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs)
+					.stream() 
+					.filter(t -> t.getNumberHours() == TariffApply.BY_HOUR.getVelue() )
+					.findFirst(); // encuentra una tarrifa aplicable para una hora
 
 			if (!tariff.isPresent())
 				throw new ViolatedConstraintException(
@@ -49,8 +51,10 @@ public interface ICalculation {
 
 		} else if ( hours <= TariffApply.BY_DAY.getVelue() ) {// cobrar por un dia
 
-			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs).stream() 
-						.filter(t -> t.getNumberHours() == TariffApply.BY_DAY.getVelue() ).findFirst(); // encuentra la tarrifa aplicable para una dia
+			Optional<TariffEntity> tariff = Lists.newArrayList(tariffs)
+					.stream() 
+					.filter(t -> t.getNumberHours() == TariffApply.BY_DAY.getVelue() )
+					.findFirst(); // encuentra la tarrifa aplicable para una dia
 
 			if (!tariff.isPresent())
 				throw new ViolatedConstraintException(
